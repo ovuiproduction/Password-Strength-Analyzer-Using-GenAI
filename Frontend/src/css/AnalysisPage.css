@@ -1,0 +1,544 @@
+.analysis-container {
+    background-color: #0a0a0a;
+    color: #ffffff;
+    min-height: 100vh;
+    padding: 40px 20px;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .analysis-title {
+    text-align: center;
+    color: #22d3ee;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+  }
+  
+  .layer-section {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    position: relative;
+    margin-bottom: 40px;
+  }
+  
+  .layer-card {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.3s ease;
+    font-weight: bold;
+    box-shadow: 0 0 10px #000;
+    text-align: center;
+    background-color: #333;
+    opacity: 0.6;
+  }
+  
+  .layer-card.processing {
+    background-color: #facc15;
+    animation: pulse 1.5s infinite;
+    opacity: 1;
+  }
+  
+  .layer-card.done {
+    background-color: #22c55e;
+    opacity: 1;
+  }
+  
+  .layer-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+  
+  .layer-name {
+    font-size: 0.85rem;
+  }
+  
+  .connector-line {
+    width: 40px;
+    height: 4px;
+    background: linear-gradient(to right, #4b5563, #22d3ee);
+    margin-top: 70px;
+    border-radius: 2px;
+  }
+  
+  .download-section {
+    text-align: center;
+    margin-top: 30px;
+  }
+  
+  .download-btn {
+    background-color: #2563eb;
+    color: white;
+    padding: 10px 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.3s ease;
+  }
+  
+  .download-btn:hover {
+    background-color: #1d4ed8;
+  }
+  
+  .result-panel {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #1f2937;
+    border-radius: 10px;
+  }
+  
+  .result-panel h2 {
+    color: #22d3ee;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+  
+  .result-block {
+    margin-bottom: 30px;
+  }
+  
+  .result-block h3 {
+    color: #34d399;
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+  }
+  
+  .result-block pre {
+    background-color: #111827;
+    padding: 15px;
+    border-radius: 6px;
+    overflow-x: auto;
+    color: #d1d5db;
+    font-size: 0.85rem;
+  }
+  
+  /* Pulse animation for processing */
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(250, 204, 21, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0); }
+  }
+  
+
+  .analysis-container {
+    background-color: #000;
+    color: #fff;
+    min-height: 100vh;
+    padding: 40px 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .analysis-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #0ff;
+    margin-bottom: 30px;
+  }
+  
+  .analysis-shield-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 40px;
+  }
+  
+  .analysis-shield {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+  }
+  
+  .analysis-icon {
+    font-size: 28px;
+    margin-bottom: 6px;
+  }
+  
+  .analysis-layer-name {
+    font-size: 12px;
+    font-weight: bold;
+  }
+  
+  .analysis-bg-pending {
+    background-color: #555;
+  }
+  
+  .analysis-bg-processing {
+    background-color: #f1c40f;
+    animation: pulse 1s infinite;
+  }
+  
+  .analysis-bg-done {
+    background-color: #27ae60;
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1); }
+  }
+  
+  .analysis-line {
+    width: 40px;
+    height: 4px;
+    background: linear-gradient(to right, #666, #0ff);
+    border-radius: 4px;
+  }
+  
+  .analysis-download-btn {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .analysis-download-btn button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .analysis-download-btn button:hover {
+    background-color: #0056b3;
+  }
+  
+  .analysis-results-panel {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #111;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .analysis-layer-result {
+    margin-bottom: 30px;
+  }
+  
+  .analysis-layer-result h3 {
+    color: #00ff88;
+    margin-bottom: 10px;
+  }
+  
+  .analysis-layer-result pre {
+    background: #222;
+    padding: 10px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 14px;
+  }
+  
+
+  .structured-result {
+    background-color: #1e1e2f;
+    padding: 16px;
+    border-radius: 8px;
+    font-family: 'Courier New', Courier, monospace;
+    overflow-x: auto;
+    border: 1px solid #2c2c3a;
+  }
+  
+  .result-item {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    word-break: break-word;
+  }
+  
+  .result-key {
+    color: #00d1ff;
+    font-weight: bold;
+    min-width: 180px;
+  }
+  
+  .result-value {
+    color: #ffffff;
+    white-space: pre-wrap;
+  }
+  
+  .result-value pre {
+    margin: 0;
+    color: #b2f5ea;
+    background: #282c34;
+    padding: 8px;
+    border-radius: 6px;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  
+
+  .original-password--header-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .password-heading {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #64ffda;
+    background-color: #1e1e2f;
+    padding: 12px 24px;
+    border-radius: 10px;
+    box-shadow: 0 0 12px rgba(100, 255, 218, 0.4);
+    letter-spacing: 1px;
+    transition: transform 0.2s ease;
+  }
+  
+  .password-heading:hover {
+    transform: scale(1.03);
+  }
+  
+
+  .analysis-shield-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 25px;
+    margin-bottom: 60px;
+    position: relative;
+  }
+  
+  .analysis-shield {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    position: relative;
+    background: #0f0f1a;
+    border: 2px solid #00ffe0;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    z-index: 1;
+  }
+  
+  .analysis-icon {
+    font-size: 32px;
+    z-index: 2;
+    color: #00ffff;
+    margin-bottom: 6px;
+  }
+  
+  .analysis-layer-name {
+    font-size: 12px;
+    font-weight: bold;
+    color: #00e5ff;
+    z-index: 2;
+    text-align: center;
+  }
+  
+  .cyber-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px dashed #00ffe0;
+    border-radius: 50%;
+    animation: rotateRing 3s linear infinite;
+    z-index: 0;
+    opacity: 0.2;
+  }
+  
+  .cyber-glow {
+    position: absolute;
+    width: 140%;
+    height: 140%;
+    background: radial-gradient(circle, #00ffff44 0%, transparent 80%);
+    border-radius: 50%;
+    animation: pulseGlow 2s infinite ease-in-out;
+    z-index: 0;
+  }
+  
+  @keyframes rotateRing {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  @keyframes pulseGlow {
+    0%, 100% { transform: scale(1); opacity: 0.4; }
+    50% { transform: scale(1.2); opacity: 0.8; }
+  }
+  
+  /* COLORS BASED ON STATE */
+  .analysis-bg-pending {
+    background: #1e1e2f;
+    border-color: #888;
+  }
+  
+  .analysis-bg-processing {
+    background: #0e0e20;
+    border-color: #00d8ff;
+    animation: shimmer 1.8s linear infinite;
+  }
+  
+  .analysis-bg-done {
+    background: #102d19;
+    border-color: #22c55e;
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.5);
+  }
+  
+  /* shimmer magic animation */
+  @keyframes shimmer {
+    0% { box-shadow: 0 0 10px #00d8ff, inset 0 0 10px #00d8ff; }
+    50% { box-shadow: 0 0 25px #00d8ff, inset 0 0 25px #00d8ff; }
+    100% { box-shadow: 0 0 10px #00d8ff, inset 0 0 10px #00d8ff; }
+  }
+  
+  .analysis-line.cyber-line {
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(to right, #00fff2, #0050ff);
+    box-shadow: 0 0 10px #00ffe0;
+    border-radius: 4px;
+    position: relative;
+  }
+  
+  .analysis-line.cyber-line::before {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 4px;
+    background: #00ffff;
+    animation: dashMove 1.5s infinite linear;
+  }
+  
+  @keyframes dashMove {
+    0% { left: -10px; }
+    100% { left: 60px; }
+  }
+  
+
+  /* Connector base */
+.analysis-line {
+  width: 50px;
+  height: 4px;
+  background: #555;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Connector animation: left to right effect */
+.animate-connector::before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to right, #22d3ee, #0ff);
+  animation: connector-flow 1.5s linear forwards;
+}
+
+/* Done connector (static glow) */
+.connector-done {
+  background: linear-gradient(to right, #00ffe7, #00ffe7);
+  box-shadow: 0 0 6px #0ff;
+}
+
+/* Pending connector (gray) */
+.connector-pending {
+  background: #444;
+}
+
+@keyframes connector-flow {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+
+.analysis-bg-final-done {
+  box-shadow: 0 0 15px #08258f;
+  position: relative;
+}
+
+.analysis-bg-intermediate-done{
+  box-shadow: 0 0 15px #08258f;
+  position: relative;
+}
+
+.analysis-bg-final-done::after {
+  content: "✓";
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  background: #000;
+  color: #a855f7;
+  border-radius: 50%;
+  padding: 6px;
+  font-size: 14px;
+  border: 2px solid #a855f7;
+  box-shadow: 0 0 6px #a855f7;
+}
+
+
+/* Connector pending - grey line */
+.connector-pending {
+  background-color: #ccc;
+  height: 4px;
+  width: 60px;
+  transition: background-color 0.3s ease;
+}
+
+/* Connector done - solid colored line */
+.connector-done {
+  background-color: #4caf50; /* green for done */
+  height: 4px;
+  width: 60px;
+}
+
+/* Connector animation - maybe a pulse or progress glow */
+.connector-animate {
+  background: linear-gradient(90deg, #4caf50, #8bc34a);
+  background-size: 200% 100%;
+  animation: animateConnector 2s linear infinite;
+  height: 4px;
+  width: 60px;
+}
+
+@keyframes animateConnector {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+
+.analysis-download-btn button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

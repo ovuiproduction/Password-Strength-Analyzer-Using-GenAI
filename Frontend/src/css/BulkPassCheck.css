@@ -1,0 +1,162 @@
+/* Main container */
+.password-upload-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Header styles */
+  .upload-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .upload-header h1 {
+    color: #2c3e50;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .subtitle {
+    color: #7f8c8d;
+    font-size: 1rem;
+  }
+  
+  /* Card styling */
+  .upload-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+  }
+  
+  /* Form styles */
+  .upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  /* File input styling */
+  .file-input-label {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: #f8f9fa;
+    border: 2px dashed #ced4da;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  
+  .file-input-label:hover {
+    border-color: #3498db;
+    background: #f1f8fe;
+  }
+  
+  .file-input-text {
+    font-weight: 500;
+    color: #2c3e50;
+  }
+  
+  .file-input {
+    display: none;
+  }
+  
+  .file-requirements {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    margin-top: 0.25rem;
+  }
+  
+  /* Button styles */
+  .button-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .submit-button, .download-button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .submit-button {
+    background: #3498db;
+    color: white;
+  }
+  
+  .submit-button:hover {
+    background: #2980b9;
+  }
+  
+  .download-button {
+    background: #2ecc71;
+    color: white;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .download-button:hover {
+    background: #27ae60;
+  }
+  
+  /* Results preview */
+  .results-preview {
+    margin-top: 2rem;
+    border-top: 1px solid #eee;
+    padding-top: 1.5rem;
+  }
+  
+  .results-preview h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  
+  th {
+    background: #f8f9fa;
+    font-weight: 500;
+  }
+  
+  /* Status badge colors */
+  .status-very-strong {
+    color: #27ae60;
+    font-weight: 500;
+  }
+  
+  .status-strong {
+    color: #2ecc71;
+  }
+  
+  .status-moderate {
+    color: #f39c12;
+  }
+  
+  .status-weak {
+    color: #e74c3c;
+    font-weight: 500;
+  }

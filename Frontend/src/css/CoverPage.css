@@ -1,0 +1,159 @@
+/* CoverPage.css */
+.cover-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  .cover-header {
+    padding: 2rem 1rem;
+    text-align: center;
+    background: linear-gradient(135deg, #1a365d, #2c5282);
+    color: white;
+    padding-bottom: 6rem;
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+  }
+  
+  .cover-nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+  }
+  
+  .cover-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .logo-icon {
+    font-size: 2rem;
+    color: #4dabf7;
+  }
+  
+  .hero-content {
+    max-width: 800px;
+    margin: 4rem auto 0;
+  }
+  
+  .hero-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
+  }
+  
+  .hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+  }
+  
+  .features-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 4rem auto 6rem;
+    padding: 0 1rem;
+  }
+  
+  .feature-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .feature-icon {
+    font-size: 2.5rem;
+    color: #2b6cb0;
+    margin-bottom: 1rem;
+  }
+  
+  .feature-card h3 {
+    color: #1a365d;
+    margin-bottom: 0.5rem;
+  }
+  
+  .feature-card p {
+    color: #4a5568;
+    font-size: 0.95rem;
+  }
+  
+  .cta-section {
+    text-align: center;
+    padding: 4rem 1rem;
+    background: white;
+  }
+  
+  .cta-section h2 {
+    font-size: 2rem;
+    color: #1a365d;
+    margin-bottom: 1.5rem;
+  }
+  
+  .cta-button {
+    background: #2b6cb0;
+    color: white;
+    padding: 1rem 2.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .cta-button:hover {
+    background: #1a365d;
+    transform: translateY(-2px);
+  }
+  
+  .cta-button.secondary {
+    background: #e9ecef;
+    color: #1a365d;
+  }
+  
+  .cta-button.secondary:hover {
+    background: #dee2e6;
+  }
+  
+  @media (max-width: 768px) {
+    .hero-content h1 {
+      font-size: 2rem;
+    }
+  
+    .features-section {
+      margin-top: -2rem;
+      margin-bottom: 4rem;
+    }
+  
+    .cta-section h2 {
+      font-size: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .cover-header {
+      clip-path: polygon(0 0, 100% 0, 100% 95%, 0 100%);
+    }
+  
+    .hero-content h1 {
+      font-size: 1.75rem;
+    }
+  
+    .feature-card {
+      padding: 1.5rem;
+    }
+  }

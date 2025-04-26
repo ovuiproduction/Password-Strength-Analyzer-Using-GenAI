@@ -1,0 +1,7 @@
+*.txt
+*.pkl
+__pycache__/
+*.csv
+.env
+node_modules/
+package-lock.json

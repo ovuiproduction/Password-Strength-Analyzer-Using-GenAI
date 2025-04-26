@@ -1,0 +1,103 @@
+/* ResetExpiryModal.css */
+.reset-expiry-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .reset-expiry-modal-content {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    animation: modalEnter 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  .reset-expiry-modal-content h2 {
+    color: #1e293b;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .reset-expiry-modal-content input {
+    width: 100%;
+    padding: 0.875rem;
+    margin-bottom: 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s;
+  }
+  
+  .reset-expiry-modal-content input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  }
+  
+  .reset-expiry-btn {
+    background: #6366f1;
+    color: white;
+    padding: 0.875rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  
+  .reset-expiry-btn:hover {
+    background: #4f46e5;
+    transform: translateY(-1px);
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 1.75rem;
+    color: #64748b;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  
+  .close-btn:hover {
+    color: #475569;
+  }
+  
+  .error-msg {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 0.75rem;
+    border-radius: 6px;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    border: 1px solid #fca5a5;
+  }
+  
+  @media (max-width: 480px) {
+    .reset-expiry-modal-content {
+      margin: 1rem;
+      padding: 1.5rem;
+    }
+    
+    .reset-expiry-modal-content h2 {
+      font-size: 1.3rem;
+    }
+  }
