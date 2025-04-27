@@ -1,7 +1,10 @@
 import React from "react";
 import "../css/PasswordResultModal.css";
+import { useState } from "react";
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+import CustomizeModal from './CustomizeModal';
 
 const PasswordResultModal = ({ data, onResetClick }) => {
   if (!data) {
@@ -11,6 +14,7 @@ const PasswordResultModal = ({ data, onResetClick }) => {
       </div>
     );
   }
+  const [showModal, setShowModal] = useState(false);
   const { status, vulnerable_layers = [] } = data;
 
   const strengthFeatures = data["Strength-Analysis"]?.features || {};
@@ -348,8 +352,20 @@ const PasswordResultModal = ({ data, onResetClick }) => {
                   >
                     ⎘
                   </button>
+                  <button
+                    className="genai-result-customize-btn"
+                    onClick={() => setShowModal(true)}
+                  >
+                    Customize
+                  </button>
                 </div>
               </div>
+              {showModal && (
+                <CustomizeModal
+                  password={data["Strong-Password"]?.result?.strong_password}
+                  closeModal={() => setShowModal(false)}
+                />
+              )}
 
               <div className="genai-result-section">
                 <h3 className="genai-result-header">
@@ -362,15 +378,16 @@ const PasswordResultModal = ({ data, onResetClick }) => {
               </div>
 
               <div className="genai-result-section">
-                {data["Strong-Password"]?.result?.attacks?.length > 0 && (
+                {data["Strong-Password"]?.result?.attacks && (
                   <div className="attack-vulnerabilities">
                     <h3 className="attack-header">Potential Vulnerabilities</h3>
                     <ul className="attack-list">
-                      {data["Strong-Password"]?.result?.attacks.map((attack, index) => (
+                      {/* {data["Strong-Password"]?.result?.attacks.map((attack, index) => (
                         <li key={index} className="attack-item">
                           {attack}
                         </li>
-                      ))}
+                      ))} */}
+                      {data["Strong-Password"]?.result?.attacks}
                     </ul>
                   </div>
                 )}

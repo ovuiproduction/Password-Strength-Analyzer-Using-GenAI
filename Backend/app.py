@@ -26,6 +26,7 @@ from crack_time_estimator.app import estimate_crack_time_for_password
 from strong_password_generator.app import generate_strong_password
 from ban_pattern_detection.app import analyze_password_variants_zxcvbn
 from PII_detector.app import analyze_pii
+from user_based_password.app import generate_strong_user_req_password
 
 # Admin imports
 from ban_pattern_detection.add_ban_words import create_indexed_banned_words_pkl
@@ -840,6 +841,13 @@ def validate_bulk_password():
 def analyzePii():
     data = request.json
     return analyze_pii(data)
+
+@app.route('/user-req-generate',methods=['POST'])
+def userReq():
+    data = request.get_json()
+    password = data.get("password")
+    user_req = data.get("user_req")
+    return generate_strong_user_req_password(password,user_req)
 
 # Main runner
 if __name__=="__main__":

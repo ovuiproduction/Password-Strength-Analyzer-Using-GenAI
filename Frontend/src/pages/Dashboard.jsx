@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import "../css/Home.css";
@@ -28,6 +29,7 @@ const Dashboard = () => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [showResetTimeModal, setShowResetTimeModal] = useState(false);
 
+  const prevPasswordRef = useRef();
 
   useState(() => {
     setUserPassword(user_password);
@@ -38,8 +40,28 @@ const Dashboard = () => {
     setResultFetchStatus(true);
   };
 
+  // useEffect(() => {
+  //   if (userPassword) {
+  //     axios
+  //       .post(
+  //         "http://localhost:5000/validate-password",
+  //         { password: userPassword },
+  //         { headers: { "Content-Type": "application/json" } }
+  //       )
+  //       .then((response) => {
+  //         setPasswordCheck(response.data.result);
+  //         toast.success("Password Checking Completed.");
+  //         if (response.data.result) setResultFetchStatus(false);
+  //         console.log(response.data);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error validating password:", error);
+  //       });
+  //   }
+  // }, [userPassword]);
+
   useEffect(() => {
-    if (userPassword) {
+    if (userPassword && userPassword !== prevPasswordRef.current) {
       axios
         .post(
           "http://localhost:5000/validate-password",
@@ -56,6 +78,9 @@ const Dashboard = () => {
           console.error("Error validating password:", error);
         });
     }
+    
+    // Update ref with the latest password
+    prevPasswordRef.current = userPassword;
   }, [userPassword]);
 
   const checkPasswordExpiry = async () => {
