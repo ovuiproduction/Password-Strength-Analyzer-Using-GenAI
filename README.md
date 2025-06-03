@@ -86,26 +86,24 @@ The system returns an **aggregated strength score**, visual feedback, and intell
 ---
 
 ## 🧪 Features Overview
-```bash
+| Feature                             | Description                                                                 |
+|-------------------------------------|-----------------------------------------------------------------------------|
+| Password Strength Analysis          | Layered evaluation using breached data, PII check, zxcvbn, entropy, and LLM |
+| Leak Detection                      | Breach dataset lookup with Bloom filters                                   |
+| Pattern Analysis                    | Detects predictable or weak sequences                                      |
+| Entropy Check                       | Measures cryptographic randomness                                          |
+| SHAP Explainability                 | Interprets feature impact for each password                                |
+| Dictionary Matching                 | Compares with common words and passwords                                   |
+| PII Detection                       | Detects use of name, email, DOB patterns                                   |
+| Strong Password Generator           | GenAI-driven custom password creation                                      |
+| Crack Time Estimation               | Estimates how long a password would take to crack                          |
+| Bulk Password Validation            | For enterprise-wide audits                                                 |
+| Password Expiration Alerts          | Notifies users of outdated passwords                                       |
+| Password History Check              | Prevents reuse of recent passwords                                         |
+| Admin Control Panel                 | Configure organizational security policies                                 |
+| Enterprise Password Uniqueness     | Ensures password uniqueness across teams                                   |
+| AI Feedback                         | Explains weaknesses and gives personalized suggestions                     |
 
-| Feature                          | Description |
-|----------------------------------|-------------|
-| **Password Strength Analysis**   | Layered evaluation using breached data, PII check, zxcvbn, entropy, and LLM |
-| **Leak Detection**               | Breach dataset lookup with Bloom filters |
-| **Pattern Analysis**             | Detects predictable or weak sequences |
-| **Entropy Check**                | Measures cryptographic randomness |
-| **SHAP Explainability**          | Interprets feature impact for each password |
-| **Dictionary Matching**          | Compares with common words and passwords |
-| **PII Detection**                | Detects use of name, email, DOB patterns |
-| **Strong Password Generator**    | GenAI-driven custom password creation |
-| **Crack Time Estimation**        | Estimates how long a password would take to crack |
-| **Bulk Password Validation**     | For enterprise-wide audits |
-| **Password Expiration Alerts**   | Notifies users of outdated passwords |
-| **Password History Check**       | Prevents reuse of recent passwords |
-| **Admin Control Panel**          | Configure organizational security policies |
-| **Enterprise Password Uniqueness** | Ensures password uniqueness across teams |
-| **AI Feedback**                  | Explains weaknesses and gives personalized suggestions |
-```
 ---
 
 ## 🧰 Skills & Technologies Used
