@@ -128,3 +128,6 @@ The system returns an **aggregated strength score**, visual feedback, and intell
 - **Users:** Get real-time feedback and generate secure, personalized passwords.
 - **Security Auditors:** Perform breach checks and pattern evaluations at scale.
 ---
+
+## License 
+This project is licensed under the [MIT License](https://github.com/ovuiproduction/Password-Strength-Analyzer-Using-GenAI/blob/main/LICENSE)
