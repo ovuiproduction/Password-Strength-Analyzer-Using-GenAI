@@ -4,7 +4,7 @@ An AI-powered, multi-layered password evaluation and generation system designed 
 
 <div align="center">
 
-### 💡 For People  
+### 🧑 For People  
 *It’s like having a personal password coach.*
 
 ### 🏢 For Industry  
