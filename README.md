@@ -4,10 +4,10 @@ An AI-powered, multi-layered password evaluation and generation system designed 
 
 <!-- Paste this into your README.md -->
 <div align="center" style="line-height:1.15; margin: 20px 0;">
-  <h1 style="margin:0 0 6px; font-size:28px; font-weight:700; letter-spacing:0.2px;">
-    “For people, it’s like having a <span style="text-decoration:underline;">personal password coach.</span>”
+  <h1 style="margin:0 0 6px; font-size:22px; font-weight:700; letter-spacing:0.2px;">
+    “For peoples, it’s like having a <span style="text-decoration:underline;">personal password coach.</span>”
   </h1>
-  <p style="margin:0; font-size:18px; font-weight:600; color:#444;">
+  <p style="margin:0; font-size:22px; font-weight:600; color:#444;">
     “For industry, it’s a <span style="font-style:italic;">compliance &amp; security enforcement tool</span>”
   </p>
 </div>
