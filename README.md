@@ -3,9 +3,9 @@
 An AI-powered, multi-layered password evaluation and generation system designed to identify vulnerabilities, improve password robustness, and assist users in creating secure yet memorable passwords. It integrates traditional security techniques, statistical analysis, and Generative AI for end-to-end password security enhancement.
 
 <!-- Paste this into your README.md -->
-<div align="center" style="line-height:1.15; margin: 20px 0;">
+<div align="center" style="line-height:1.15;">
   <p style="margin:0 0 6px; font-size:22px; font-weight:700; letter-spacing:0.2px;">
-    “For peoples, it’s like having a <span style="text-decoration:underline;">personal password coach.</span>”
+    “For peoples, it’s like having a <span style="font-style:italic;">personal password coach.</span>”
   </p>
   <p style="margin:0; font-size:22px; font-weight:600; color:#444;">
     “For industry, it’s a <span style="font-style:italic;">compliance &amp; security enforcement tool</span>”
