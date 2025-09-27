@@ -140,9 +140,6 @@ The system returns an **aggregated strength score**, visual feedback, and intell
 - **Security Auditors:** Perform breach checks and pattern evaluations at scale.
 ---
 
-## License 
-
----
 
 ## 🗂️ Project Structure
 
@@ -154,49 +151,50 @@ Password-Strength-Analysis-Using-GenAI/
 │   ├── ban_pattern_detection/
 │   │   ├── app.py
 │   │   ├── add_ban_words.py
-│   │   ├── ban_words_collection/
-│   │   │   ├── banned_words_1.pkl ... banned_words_6.pkl
-│   │   │   └── ReadMe.md
-│   │   └── __pycache__/
+│   │   └── ban_words_collection/
+│   │       ├── banned_words_1.pkl ... banned_words_6.pkl
+│   │       └── ReadMe.md
+│   │   
 │   ├── composition_check/
 │   │   ├── app.py
 │   │   ├── models/
 │   │   │   ├── preprocessor.pkl
-│   │   │   ├── random_forest_model.pkl
-│   │   │   └── xgboost_model.pkl
-│   │   └── __pycache__/
+│   │   │   └── random_forest_model.pkl
+│   │   ├── data_generation (Data prepared for training model (Rockyou-weak password data))
+│   │   │      └── app.py
+│   │   └── train_models
+│   │         └── app.py
 │   ├── crack_time_estimator/
 │   │   ├── app.py
 │   │   ├── password.txt
-│   │   ├── weak_password.txt
-│   │   └── __pycache__/
+│   │   └── weak_password.txt
+│   │   
 │   ├── deepfake_audio_detection/
 │   │   ├── app.py
 │   │   ├── my_model.h5
-│   │   ├── Test/
-│   │   │   ├── fake_audio.mp3
-│   │   │   ├── OriginalAudio.wav
-│   │   │   └── OriginalAudio-2.wav
-│   │   └── __pycache__/
+│   │   └── Test/
+│   │       ├── fake_audio.mp3
+│   │       ├── OriginalAudio.wav
+│   │       └── OriginalAudio-2.wav
+│   │   
 │   ├── leaked_password_detection/
 │   │   ├── app.py
-│   │   ├── bloom_filters/
-│   │   │   ├── bloom_00.pkl ... bloom_ff.pkl
-│   │   │   └── ReadMe.md
-│   │   └── __pycache__/
-│   ├── output_files/
-│   │   └── password_status_output.csv
+│   │   └── bloom_filters/
+│   │       ├── bloom_00.pkl ... bloom_ff.pkl
+│   │       └── ReadMe.md
+│   │   
+│   │
 │   ├── PII_detector/
-│   │   ├── app.py
-│   │   └── __pycache__/
+│   │   └── app.py
+│   │   
 │   ├── strong_password_generator/
 │   │   ├── app_gemini.py
-│   │   ├── app_mistral.py
-│   │   └── __pycache__/
+│   │   └── app_mistral.py
+│   │   
 │   └── user_based_password/
 │       ├── app_gemini.py
-│       ├── app_mistral.py
-│       └── __pycache__/
+│       └── app_mistral.py
+│      
 │
 ├── Frontend/
 │   ├── package.json
@@ -226,10 +224,13 @@ Password-Strength-Analysis-Using-GenAI/
 │           ├── ... (other feature styles)
 │
 ├── LICENSE
-├── password Check.csv
 ├── README.md
 
 ```
+
+---
+
+## License 
 
 ---
 
