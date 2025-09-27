@@ -141,4 +141,96 @@ The system returns an **aggregated strength score**, visual feedback, and intell
 ---
 
 ## License 
+
+---
+
+## 🗂️ Project Structure
+
+```text
+Password-Strength-Analysis-Using-GenAI/
+│
+├── Backend/
+│   ├── app.py
+│   ├── ban_pattern_detection/
+│   │   ├── app.py
+│   │   ├── add_ban_words.py
+│   │   ├── ban_words_collection/
+│   │   │   ├── banned_words_1.pkl ... banned_words_6.pkl
+│   │   │   └── ReadMe.md
+│   │   └── __pycache__/
+│   ├── composition_check/
+│   │   ├── app.py
+│   │   ├── models/
+│   │   │   ├── preprocessor.pkl
+│   │   │   ├── random_forest_model.pkl
+│   │   │   └── xgboost_model.pkl
+│   │   └── __pycache__/
+│   ├── crack_time_estimator/
+│   │   ├── app.py
+│   │   ├── password.txt
+│   │   ├── weak_password.txt
+│   │   └── __pycache__/
+│   ├── deepfake_audio_detection/
+│   │   ├── app.py
+│   │   ├── my_model.h5
+│   │   ├── Test/
+│   │   │   ├── fake_audio.mp3
+│   │   │   ├── OriginalAudio.wav
+│   │   │   └── OriginalAudio-2.wav
+│   │   └── __pycache__/
+│   ├── leaked_password_detection/
+│   │   ├── app.py
+│   │   ├── bloom_filters/
+│   │   │   ├── bloom_00.pkl ... bloom_ff.pkl
+│   │   │   └── ReadMe.md
+│   │   └── __pycache__/
+│   ├── output_files/
+│   │   └── password_status_output.csv
+│   ├── PII_detector/
+│   │   ├── app.py
+│   │   └── __pycache__/
+│   ├── strong_password_generator/
+│   │   ├── app_gemini.py
+│   │   ├── app_mistral.py
+│   │   └── __pycache__/
+│   └── user_based_password/
+│       ├── app_gemini.py
+│       ├── app_mistral.py
+│       └── __pycache__/
+│
+├── Frontend/
+│   ├── package.json
+│   ├── public/
+│   │   ├── index.html
+│   │   ├── favicon.ico
+│   │   └── ... (icons, manifest)
+│   └── src/
+│       ├── App.js
+│       ├── index.js
+│       ├── components/
+│       │   ├── AdminControlPanel.jsx
+│       │   ├── AuthModal.jsx
+│       │   ├── BreachDetection.jsx
+│       │   ├── ... (other components)
+│       ├── css/
+│       │   ├── Dashboard.css
+│       │   ├── ... (other styles)
+│       ├── images/
+│       │   └── logo.png
+│       ├── pages/
+│       │   ├── Dashboard.jsx
+│       │   ├── PasswordAnalysis.jsx
+│       │   ├── ... (other pages)
+│       └── styles/
+│           ├── BreachDetection.css
+│           ├── ... (other feature styles)
+│
+├── LICENSE
+├── password Check.csv
+├── README.md
+
+```
+
+---
+
 This project is licensed under the [MIT License](https://github.com/ovuiproduction/Password-Strength-Analyzer-Using-GenAI/blob/main/LICENSE)
