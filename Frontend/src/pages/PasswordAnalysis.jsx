@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import "../css/Home.css";
 import axios from "axios";
 
-import logo from "../images/logo.jpg"
+import logo from "../images/logo.png";
 
 import PasswordResultModalBoard from "../components/PasswordResultModalBoard";
 

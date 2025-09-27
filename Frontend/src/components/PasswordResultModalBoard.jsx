@@ -11,32 +11,53 @@ const PasswordResultModalBoard = ({ data, onResetClick }) => {
   }
   const { status, vulnerable_layers = [] } = data;
 
-
   return (
     <div className="password-result-modal">
-      <h2 className="modal-title">Password Security Analysis</h2>
+      <h2 className="modal-title">Consolidated Security Status - <span className="analyzed-password">{data["password"]}</span></h2>
 
       {status && vulnerable_layers.length > 0 && (
-        <div className="vulnerability-alert">
-          <div className="alert-header">
-            <h3>🚨 Security Alert: Vulnerabilities Detected</h3>
+        <>
+          <div className="vulnerability-alert">
+            <div className="alert-header">
+              <h3>🚨 Security Alert: Vulnerabilities Detected</h3>
+            </div>
+            <div className="vulnerable-layers">
+              <p>Affected security layers:</p>
+              <ul>
+                {vulnerable_layers.map((layer, index) => (
+                  <li key={index}>{layer.replace(/-/g, " ")}</li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <div className="vulnerable-layers">
-            <p>Affected security layers:</p>
-            <ul>
-              {vulnerable_layers.map((layer, index) => (
-                <li key={index}>{layer.replace(/-/g, " ")}</li>
-              ))}
-            </ul>
+          <div className="genai-result-section">
+            {data["Strong-Password"]?.result?.attacks && (
+              <div className="attack-vulnerabilities">
+                <h3 className="attack-header">Potential Vulnerabilities</h3>
+                <ul className="attack-list">
+                  {data["Strong-Password"]?.result?.attacks.map(
+                    (attack, index) => (
+                      <li key={index} className="attack-item">
+                        {attack}
+                      </li>
+                    )
+                  )}
+                  {/* {data["Strong-Password"]?.result?.attacks} */}
+                </ul>
+              </div>
+            )}
           </div>
-        </div>
+        </>
       )}
+
+ <h2 className="modal-title">Layer Wise Security Status</h2>
 
       <div className="layer-results-grid">
         {/* Leaked Password Detection */}
         <div
-          className={`result-card ${data["Leaked-Password-Detection"]?.status ? "vulnerable" : "safe"
-            }`}
+          className={`result-card ${
+            data["Leaked-Password-Detection"]?.status ? "vulnerable" : "safe"
+          }`}
         >
           <h4>🔒 Leak Detection</h4>
           <div className="status-indicator">
@@ -54,8 +75,9 @@ const PasswordResultModalBoard = ({ data, onResetClick }) => {
 
         {/* Banned Words Detection */}
         <div
-          className={`result-card ${data["Banned-Words-Detection"]?.status ? "vulnerable" : "safe"
-            }`}
+          className={`result-card ${
+            data["Banned-Words-Detection"]?.status ? "vulnerable" : "safe"
+          }`}
         >
           <h4>🛑 Banned Patterns</h4>
           <div className="status-indicator">
@@ -83,15 +105,15 @@ const PasswordResultModalBoard = ({ data, onResetClick }) => {
               </div>
               {data["Banned-Words-Detection"]?.original_password_result
                 ?.warning && (
-                  <div className="warning-section">
-                    <p>
-                      {
-                        data["Banned-Words-Detection"]?.original_password_result
-                          ?.warning
-                      }
-                    </p>
-                  </div>
-                )}
+                <div className="warning-section">
+                  <p>
+                    {
+                      data["Banned-Words-Detection"]?.original_password_result
+                        ?.warning
+                    }
+                  </p>
+                </div>
+              )}
             </>
           )}
 
@@ -112,15 +134,15 @@ const PasswordResultModalBoard = ({ data, onResetClick }) => {
                 </div>
                 {data["Banned-Words-Detection"]?.normalized_password_result
                   ?.warning && (
-                    <div className="warning-section">
-                      <p>
-                        {
-                          data["Banned-Words-Detection"]
-                            ?.normalized_password_result?.warning
-                        }
-                      </p>
-                    </div>
-                  )}
+                  <div className="warning-section">
+                    <p>
+                      {
+                        data["Banned-Words-Detection"]
+                          ?.normalized_password_result?.warning
+                      }
+                    </p>
+                  </div>
+                )}
                 <p className="explanation">
                   {data["Banned-Words-Detection"]?.explain}
                 </p>
@@ -131,8 +153,9 @@ const PasswordResultModalBoard = ({ data, onResetClick }) => {
 
         {/* Password Strength Analysis */}
         <div
-          className={`result-card ${data["Strength-Analysis"]?.status ? "vulnerable" : "safe"
-            }`}
+          className={`result-card ${
+            data["Strength-Analysis"]?.status ? "vulnerable" : "safe"
+          }`}
         >
           <h4>📊 Strength Analysis</h4>
           <div className="strength-metrics">
@@ -158,8 +181,9 @@ const PasswordResultModalBoard = ({ data, onResetClick }) => {
 
         {/* Crack Time Estimation */}
         <div
-          className={`result-card ${data["Crack-Time-Estimation"]?.status ? "vulnerable" : "safe"
-            }`}
+          className={`result-card ${
+            data["Crack-Time-Estimation"]?.status ? "vulnerable" : "safe"
+          }`}
         >
           <h4>⏱️ Crack Time Estimation</h4>
           <p className="result-statement">
@@ -170,11 +194,12 @@ const PasswordResultModalBoard = ({ data, onResetClick }) => {
           <div className="crack-engine-result">
             {/* MD5 Hash Result */}
             <div
-              className={`cracking-algorithm-result ${data["Crack-Time-Estimation"]?.md5_hash_result?.status ===
-                  "cracked"
+              className={`cracking-algorithm-result ${
+                data["Crack-Time-Estimation"]?.md5_hash_result?.status ===
+                "cracked"
                   ? "vulnerable"
                   : "safe"
-                }`}
+              }`}
             >
               <div className="algorithm-header">
                 <span className="algorithm-name">MD5 Hash</span>
@@ -185,16 +210,16 @@ const PasswordResultModalBoard = ({ data, onResetClick }) => {
               <div className="algorithm-details">
                 {data["Crack-Time-Estimation"]?.md5_hash_result
                   ?.cracked_password && (
-                    <p className="cracked-password">
-                      Cracked Password:{" "}
-                      <strong>
-                        {
-                          data["Crack-Time-Estimation"].md5_hash_result
-                            .cracked_password
-                        }
-                      </strong>
-                    </p>
-                  )}
+                  <p className="cracked-password">
+                    Cracked Password:{" "}
+                    <strong>
+                      {
+                        data["Crack-Time-Estimation"].md5_hash_result
+                          .cracked_password
+                      }
+                    </strong>
+                  </p>
+                )}
                 <p className="crack-method">
                   Method:{" "}
                   {data["Crack-Time-Estimation"]?.md5_hash_result?.method}
@@ -219,11 +244,12 @@ const PasswordResultModalBoard = ({ data, onResetClick }) => {
 
             {/* SHA256 Hash Result */}
             <div
-              className={`cracking-algorithm-result ${data["Crack-Time-Estimation"]?.sha256_hash_result?.status ===
-                  "cracked"
+              className={`cracking-algorithm-result ${
+                data["Crack-Time-Estimation"]?.sha256_hash_result?.status ===
+                "cracked"
                   ? "vulnerable"
                   : "safe"
-                }`}
+              }`}
             >
               <div className="algorithm-header">
                 <span className="algorithm-name">SHA256 Hash</span>
@@ -234,16 +260,16 @@ const PasswordResultModalBoard = ({ data, onResetClick }) => {
               <div className="algorithm-details">
                 {data["Crack-Time-Estimation"]?.sha256_hash_result
                   ?.cracked_password && (
-                    <p className="cracked-password">
-                      Cracked Password:{" "}
-                      <strong>
-                        {
-                          data["Crack-Time-Estimation"].sha256_hash_result
-                            .cracked_password
-                        }
-                      </strong>
-                    </p>
-                  )}
+                  <p className="cracked-password">
+                    Cracked Password:{" "}
+                    <strong>
+                      {
+                        data["Crack-Time-Estimation"].sha256_hash_result
+                          .cracked_password
+                      }
+                    </strong>
+                  </p>
+                )}
                 <p className="crack-method">
                   Method:{" "}
                   {data["Crack-Time-Estimation"]?.sha256_hash_result?.method}
@@ -307,7 +333,11 @@ const PasswordResultModalBoard = ({ data, onResetClick }) => {
                   </p>
                   <button
                     className="genai-result-copy-btn"
-                    onClick={() => navigator.clipboard.writeText(data["Strong-Password"]?.result?.strong_password)}
+                    onClick={() =>
+                      navigator.clipboard.writeText(
+                        data["Strong-Password"]?.result?.strong_password
+                      )
+                    }
                     title="Copy password"
                   >
                     ⎘
@@ -321,7 +351,10 @@ const PasswordResultModalBoard = ({ data, onResetClick }) => {
                   Security Explanation
                 </h3>
                 <p className="genai-result-content genai-result-explanation">
-                  {data["Strong-Password"]?.result?.reasoning_generated_password}
+                  {
+                    data["Strong-Password"]?.result
+                      ?.reasoning_generated_password
+                  }
                 </p>
               </div>
             </div>

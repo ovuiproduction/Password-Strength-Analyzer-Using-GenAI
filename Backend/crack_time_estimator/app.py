@@ -129,7 +129,7 @@ def crack_hash(hash_value, plaintext_password, john_path, wordlist_file, timeout
             detailed_crack_time[key] = formatted_time
         
         return {
-            "status": "not_cracked",
+            "status": "timeout",
             "method": "timeout",
             "crack_time_seconds": None,
             "estimated_time_to_crack": estimated_time,
@@ -157,6 +157,44 @@ def estimate_crack_time_for_password(password_plaintext,timeout):
         "sha256_hash_result": crack_hash(sha256_hash, password_plaintext, john_exe_path, wordlist_file, timeout)
     }
     return results
+
+
+def format_l4_result(result):
+    md5_result = result.get("md5_hash_result", {})
+    sha256_result = result.get("sha256_hash_result", {})
+    
+    # Determine overall status
+    is_cracked = (
+        md5_result.get("status") == "cracked" or 
+        sha256_result.get("status") == "cracked"
+    )
+
+    # Construct result statement
+    if is_cracked:
+        cracked_algos = []
+        if md5_result.get("status") == "cracked":
+            cracked_algos.append("MD5")
+        if sha256_result.get("status") == "cracked":
+            cracked_algos.append("SHA256")
+        result_statement = (
+            f"The password was cracked using {', '.join(cracked_algos)} hash algorithm(s), "
+            f"indicating it is vulnerable to offline dictionary attacks. "
+            "Consider choosing a stronger password with higher entropy."
+        )
+    else:
+        result_statement = (
+            "The password could not be cracked using MD5 or SHA256 hashes within the given constraints. "
+            "This suggests a reasonable level of resistance against common hash-cracking methods."
+        )
+
+    formatted_result = {
+        "md5_hash_result": md5_result,
+        "sha256_hash_result": sha256_result,
+        "status": is_cracked,
+        "result_statement": result_statement
+    }
+
+    return formatted_result
 
 
 # print(estimate_crack_time_for_password("password@123",10))

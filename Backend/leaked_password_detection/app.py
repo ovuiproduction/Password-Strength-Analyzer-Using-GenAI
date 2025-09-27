@@ -178,6 +178,26 @@ def leaked_password_detector(password):
     return result
 
 
+
+def format_l1_result(result):
+    status_flag = result.get("status")
+    variant = result.get("variant")
+    
+    if status_flag:
+        result_statement = "Your current password has been found in known data breaches or leaked password databases."
+    else:
+        result_statement = "Your password has not been found in any known data breaches. It appears to be safe."
+
+    formatted_result = {
+        "status": status_flag,
+        "variant": variant,
+        "statement": result_statement
+    }
+
+    return formatted_result
+
+
+
 # if __name__ == "__main__":
 #     while True:
 #         try:

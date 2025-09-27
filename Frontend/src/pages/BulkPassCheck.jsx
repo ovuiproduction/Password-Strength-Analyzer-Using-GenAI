@@ -90,7 +90,7 @@ function BulkPassCheck() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {data.outputFile.slice(0, 5).map((row, index) => (
+                                {data.outputFile.map((row, index) => (
                                     <tr key={index}>
                                         <td>{row.password}</td>
                                         <td className={`status-${row.status.toLowerCase().replace(' ', '-')}`}>

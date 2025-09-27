@@ -53,9 +53,11 @@ const LoginForm = ({ switchForm, closeModal }) => {
         }
       );      
       localStorage.setItem('token', res.data.token);
+      // const { password_analysis_status, password_analysis } = res.data;
       toast.success("Login successful!");
       closeModal();
-      navigate('/dashboard', { state: { password: password } });
+      navigate('/dashboard', { state: { user_password: password,user_email:email } });
+      // navigate('/dashboard', { state: { user_password: password,password_analysis_status:password_analysis_status,password_analysis:password_analysis } });
     } catch (err) {
       toast.error(err.response?.data?.error || 'Login failed');
     }

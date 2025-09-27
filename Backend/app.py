@@ -19,14 +19,38 @@ load_dotenv()
 
 
 # imports
+
+# Layer 1
 from leaked_password_detection.app import leaked_password_detector
+from leaked_password_detection.app import format_l1_result
+
+# Layer 2
 from ban_pattern_detection.app import ban_words_identification
-from composition_check.app import password_strength_generator
+from ban_pattern_detection.app import format_l2_result
+
+# Layer 3
+from composition_check.app import password_strength_meter
+from composition_check.app import format_l3_result
+
+# Layer 4
 from crack_time_estimator.app import estimate_crack_time_for_password
-from strong_password_generator.app import generate_strong_password
+from crack_time_estimator.app import format_l4_result
+
+# Layer 5
+from strong_password_generator.app_gemini import generate_strong_password_using_gemini
+from strong_password_generator.app_gemini import format_l5_result
+
+# Layer 6 (independent)
+from deepfake_audio_detection.app import analyze_audio
+
+# password variants banword detection
 from ban_pattern_detection.app import analyze_password_variants_zxcvbn
+
+# personally indentifiable information detection
 from PII_detector.app import analyze_pii
-from user_based_password.app import generate_strong_user_req_password
+
+# from user_based_password.app_mistral import generate_strong_user_req_password
+from user_based_password.app_gemini import generate_strong_user_req_password
 
 # Admin imports
 from ban_pattern_detection.add_ban_words import create_indexed_banned_words_pkl
@@ -61,26 +85,11 @@ def index():
     return jsonify(f"Server running on {PORT}")
 
 
-
 # Variables
 
 PASSWORD_EXPIRY_DAYS = 30
 PASSWORD_TIMEOUT = 15
 
-PASSWORD_CONSTRAINTS = {
-    "length": {"min": 12},                   # Minimum 8 characters
-    "entropy": {"min": 15},                 # Minimum entropy threshold
-    "shannon_entropy": {"min": 2.5},         # Shannon entropy minimum
-    "num_unique_chars": {"min": 5},          # At least 5 unique characters
-    "unique_char_ratio": {"min": 0.5},       # At least 50% unique characters
-    "has_upper_lower": {"required": True},   # Should have both uppercase and lowercase
-    "digit_ratio": {"min": 0.1},             # At least 10% digits
-    "special_ratio": {"min": 0.1},           # At least 10% special characters
-    "upper_case_ratio": {"min": 0.1},         # Minimum 10% uppercase
-    "lower_case_ratio": {"min": 0.1},         # Minimum 10% lowercase
-    "num_repeated_chars": {"max": 2},         # Maximum 2 repeated chars allowed
-    "dictionary_match_count": {"max": 1}      # Maximum 1 dictionary match
-}
 
 
 #### Functions for user
@@ -113,170 +122,177 @@ def update_password_composition_constraints(new_constraints):
 
 ### Format layer results
 
-def format_l1_result(result):
-    status_flag = result.get("status")
-    variant = result.get("variant")
+# def format_l1_result(result):
+#     status_flag = result.get("status")
+#     variant = result.get("variant")
     
-    if status_flag:
-        result_statement = "Your current password has been found in known data breaches or leaked password databases."
-    else:
-        result_statement = "Your password has not been found in any known data breaches. It appears to be safe."
+#     if status_flag:
+#         result_statement = "Your current password has been found in known data breaches or leaked password databases."
+#     else:
+#         result_statement = "Your password has not been found in any known data breaches. It appears to be safe."
 
-    formatted_result = {
-        "status": status_flag,
-        "variant": variant,
-        "statement": result_statement
-    }
+#     formatted_result = {
+#         "status": status_flag,
+#         "variant": variant,
+#         "statement": result_statement
+#     }
 
-    return formatted_result
+#     return formatted_result
 
-def format_l2_result(result):
-    def filter_patterns(patterns):
-        return [
-            {
-                "pattern": p.get("pattern"),
-                "dictionary_name": p.get("dictionary_name"),
-                "matched_word": p.get("matched_word")
-            }
-            for p in patterns
-            if isinstance(p.get("matched_word"), str) and len(p.get("matched_word", "")) >= 3
-        ]
+# def format_l2_result(result):
+#     def filter_patterns(patterns):
+#         filtered = []
+#         for p in patterns:
+#             # Skip bruteforce patterns
+#             if p.get("pattern") == "bruteforce":
+#                 continue
+                
+#             # Include patterns without matched_word OR with matched_word length >= 3
+#             matched_word = p.get("matched_word")
+#             if matched_word is None or len(matched_word) >= 3:
+#                 filtered.append({
+#                     "pattern": p.get("pattern"),
+#                     "token": p.get("token"),
+#                     "dictionary_name": p.get("dictionary_name"),
+#                     "matched_word": matched_word
+#                 })
+#         return filtered
 
-    def format_password_result(data):
-        filtered_patterns = filter_patterns(data.get("patterns", []))
-        return {
-            "status": bool(filtered_patterns),
-            "patterns": filtered_patterns,
-            "warning": data.get("warning", ""),
-            "suggestions": data.get("suggestions", [])
-        }
+#     def format_password_result(data):
+#         filtered_patterns = filter_patterns(data.get("patterns", []))
+#         return {
+#             "status": bool(filtered_patterns),
+#             "patterns": filtered_patterns,
+#             "warning": data.get("warning", ""),
+#             "suggestions": data.get("suggestions", [])
+#         }
 
-    original = result.get("original_password_analysis", {})
-    normalized = result.get("normalized_password_analysis", {})
-    is_weaker = result.get("normalized_is_weaker", False)
+#     original = result.get("original_password_analysis", {})
+#     normalized = result.get("normalized_password_analysis", {})
+#     is_weaker = result.get("normalized_is_weaker", False)
 
-    original_formatted = format_password_result(original)
-    formatted_result = {
-        "original_password_result": original_formatted,
-        "normalized_is_weaker": is_weaker
-    }
+#     original_formatted = format_password_result(original)
+#     formatted_result = {
+#         "original_password_result": original_formatted,
+#         "normalized_is_weaker": is_weaker
+#     }
 
-    if is_weaker:
-        normalized_formatted = format_password_result(normalized)
-        formatted_result["normalized_password_result"] = normalized_formatted
-        formatted_result["explain"] = (
-            f"The normalized password is considered weaker because it has a lower strength score "
-            f"({normalized.get('score', 0)}) compared to the original ({original.get('score', 0)}), "
-            f"and a lower entropy ({normalized.get('entropy', 0.0)} vs {original.get('entropy', 0.0)}), "
-            f"making it more susceptible to guessing attacks."
-        )
-        # Include status from normalized as well if present
-        final_status = original_formatted["status"] or normalized_formatted["status"]
-    else:
-        final_status = original_formatted["status"]
+#     if is_weaker:
+#         normalized_formatted = format_password_result(normalized)
+#         formatted_result["normalized_password_result"] = normalized_formatted
+#         formatted_result["explain"] = (
+#             f"The normalized password is considered weaker because it has a lower strength score "
+#             f"({normalized.get('score', 0)}) compared to the original ({original.get('score', 0)}), "
+#             f"and a lower entropy ({normalized.get('entropy', 0.0)} vs {original.get('entropy', 0.0)}), "
+#             f"making it more susceptible to guessing attacks."
+#         )
+#         # Include status from normalized as well if present
+#         final_status = original_formatted["status"] or normalized_formatted["status"]
+#     else:
+#         final_status = original_formatted["status"]
 
-    formatted_result["status"] = final_status
+#     formatted_result["status"] = final_status
 
-    return formatted_result
+#     return formatted_result
 
-def format_l3_result(result):
-    features = result.get("features", {})
-    shap_impact = result.get("shap_impact", {})
-    score = round(result.get("score", 0), 2)
+# def format_l3_result(result):
+#     features = result.get("features", {})
+#     shap_impact = result.get("shap_impact", {})
+#     score = round(result.get("score", 0), 2)
 
-    relevant_feature_keys = PASSWORD_CONSTRAINTS.keys()
+#     relevant_feature_keys = PASSWORD_CONSTRAINTS.keys()
 
-    # Filter relevant features and add score
-    filtered_features = {
-        key: features.get(key, 0)
-        for key in relevant_feature_keys
-        if key in features
-    }
-    filtered_features["score"] = score
+#     # Filter relevant features and add score
+#     filtered_features = {
+#         key: features.get(key, 0)
+#         for key in relevant_feature_keys
+#         if key in features
+#     }
+#     filtered_features["score"] = score
 
-    # Check constraints
-    status = False
-    failed_conditions = []
+#     # Check constraints
+#     status = False
+#     failed_conditions = []
 
-    for key, conditions in PASSWORD_CONSTRAINTS.items():
-        feature_value = features.get(key, 0)
+#     for key, conditions in PASSWORD_CONSTRAINTS.items():
+#         feature_value = features.get(key, 0)
 
-        for condition_type, condition_value in conditions.items():
-            if condition_type == "min" and feature_value < condition_value:
-                status = True
-                failed_conditions.append({
-                    "feature": key,
-                    "expected": f"min {condition_value}",
-                    "actual": feature_value
-                })
-            if condition_type == "max" and feature_value > condition_value:
-                status = True
-                failed_conditions.append({
-                    "feature": key,
-                    "expected": f"max {condition_value}",
-                    "actual": feature_value
-                })
-            if condition_type == "required" and not feature_value:
-                status = True
-                failed_conditions.append({
-                    "feature": key,
-                    "expected": "required True",
-                    "actual": feature_value
-                })
+#         for condition_type, condition_value in conditions.items():
+#             if condition_type == "min" and feature_value < condition_value:
+#                 status = True
+#                 failed_conditions.append({
+#                     "feature": key,
+#                     "expected": f"min {condition_value}",
+#                     "actual": feature_value
+#                 })
+#             if condition_type == "max" and feature_value > condition_value:
+#                 status = True
+#                 failed_conditions.append({
+#                     "feature": key,
+#                     "expected": f"max {condition_value}",
+#                     "actual": feature_value
+#                 })
+#             if condition_type == "required" and not feature_value:
+#                 status = True
+#                 failed_conditions.append({
+#                     "feature": key,
+#                     "expected": "required True",
+#                     "actual": feature_value
+#                 })
 
-    strength = "Strong" if status else "Weak"
+#     strength = "Strong" if status else "Weak"
 
-    if score == 0 : status = True
+#     if score == 0 : status = True
 
-    formatted_result = {
-        "score":score,
-        "features": filtered_features,
-        "shap_impact": shap_impact,
-        "strength": strength,
-        "status": status,
-        "failed_conditions": failed_conditions
-    }
+#     formatted_result = {
+#         "score":score,
+#         "features": filtered_features,
+#         "shap_impact": shap_impact,
+#         "strength": strength,
+#         "status": status,
+#         "failed_conditions": failed_conditions
+#     }
 
-    return formatted_result
+#     return formatted_result
 
-def format_l4_result(result):
-    md5_result = result.get("md5_hash_result", {})
-    sha256_result = result.get("sha256_hash_result", {})
+# def format_l4_result(result):
+#     md5_result = result.get("md5_hash_result", {})
+#     sha256_result = result.get("sha256_hash_result", {})
     
-    # Determine overall status
-    is_cracked = (
-        md5_result.get("status") == "cracked" or 
-        sha256_result.get("status") == "cracked"
-    )
+#     # Determine overall status
+#     is_cracked = (
+#         md5_result.get("status") == "cracked" or 
+#         sha256_result.get("status") == "cracked"
+#     )
 
-    # Construct result statement
-    if is_cracked:
-        cracked_algos = []
-        if md5_result.get("status") == "cracked":
-            cracked_algos.append("MD5")
-        if sha256_result.get("status") == "cracked":
-            cracked_algos.append("SHA256")
-        result_statement = (
-            f"The password was cracked using {', '.join(cracked_algos)} hash algorithm(s), "
-            f"indicating it is vulnerable to offline dictionary attacks. "
-            "Consider choosing a stronger password with higher entropy."
-        )
-    else:
-        result_statement = (
-            "The password could not be cracked using MD5 or SHA256 hashes within the given constraints. "
-            "This suggests a reasonable level of resistance against common hash-cracking methods."
-        )
+#     # Construct result statement
+#     if is_cracked:
+#         cracked_algos = []
+#         if md5_result.get("status") == "cracked":
+#             cracked_algos.append("MD5")
+#         if sha256_result.get("status") == "cracked":
+#             cracked_algos.append("SHA256")
+#         result_statement = (
+#             f"The password was cracked using {', '.join(cracked_algos)} hash algorithm(s), "
+#             f"indicating it is vulnerable to offline dictionary attacks. "
+#             "Consider choosing a stronger password with higher entropy."
+#         )
+#     else:
+#         result_statement = (
+#             "The password could not be cracked using MD5 or SHA256 hashes within the given constraints. "
+#             "This suggests a reasonable level of resistance against common hash-cracking methods."
+#         )
 
-    formatted_result = {
-        "md5_hash_result": md5_result,
-        "sha256_hash_result": sha256_result,
-        "status": is_cracked,
-        "result_statement": result_statement
-    }
+#     formatted_result = {
+#         "md5_hash_result": md5_result,
+#         "sha256_hash_result": sha256_result,
+#         "status": is_cracked,
+#         "result_statement": result_statement
+#     }
 
-    return formatted_result
+#     return formatted_result
 
-def format_5_result(result):
+# def format_5_result(result):
     return{
         "result":result,
         "status":False
@@ -309,13 +325,12 @@ def is_password_expired(current_user):
     if time_diff.days > PASSWORD_EXPIRY_DAYS:
         return jsonify({"status":"expired","alert": "Your password has expired. Please change it."}), 200
     elif time_diff.days > (PASSWORD_EXPIRY_DAYS - 5):
-        return jsonify({"status":"warning","alert": "Your password is about to expire. Please change it soon."}), 200
+        return jsonify({"status":"warning","alert": "Your password is about to expire. Please change it soon. Expire after {PASSWORD_EXPIRY_DAYS-time_diff.days} days"}), 200
 
     return jsonify({"status":"safe","alert": f"Your password is within valid duration. Expire after {PASSWORD_EXPIRY_DAYS-time_diff.days} days"}), 200
 
 def validate_password(password):
     result = {}
-    
     # Layer 1: Leaked Password Detection
     layer1_raw_res = leaked_password_detector(password)
     layer1_res = format_l1_result(layer1_raw_res)
@@ -327,7 +342,7 @@ def validate_password(password):
     result["Banned-Words-Detection"] = layer2_res
 
     # Layer 3: Password Strength
-    layer3_raw_res = password_strength_generator(password)
+    layer3_raw_res = password_strength_meter(password)
     layer3_res = format_l3_result(layer3_raw_res)
     result["Strength-Analysis"] = layer3_res
 
@@ -337,8 +352,8 @@ def validate_password(password):
     result["Crack-Time-Estimation"] = layer4_res
 
     # Layer 5: password generation
-    layer5_raw = generate_strong_password(password)
-    layer5_res = format_5_result(layer5_raw)
+    layer5_raw = generate_strong_password_using_gemini(password)
+    layer5_res = format_l5_result(layer5_raw)
     result["Strong-Password"] = layer5_res
    
     # Final status & vulnerable layers
@@ -347,11 +362,11 @@ def validate_password(password):
         if layer_data.get("status"):
             vulnerable_layers.append(layer_name)
 
+    result["password"] = password
     result["status"] = bool(vulnerable_layers)
     result["vulnerable_layers"] = vulnerable_layers
 
     return result
-
 
 def format_l4_single_result(password):
     zxcvbn_result = zxcvbn(password)
@@ -397,7 +412,9 @@ def signup():
             "hashed_password": hashed_password.decode('utf-8'),
             "reuse_hash": reuse_hash,
             "created_at": datetime.now(timezone.utc),
-            "updated_at": datetime.now(timezone.utc)
+            "updated_at": datetime.now(timezone.utc),
+            "password_analysis_status":"false",
+            "password_analysis_report":{},
         }
         
         insert_result = users_collection.insert_one(user_data)
@@ -424,7 +441,7 @@ def reset_password():
     data = request.json
     new_password = data.get("new_password")
     current_password = data.get("current_password")
-    current_user = get_jwt_identity() 
+    current_user = get_jwt_identity()
     
     if not current_password or not new_password:
         return jsonify({"error": "current password and new password are required"}), 400
@@ -493,7 +510,6 @@ def login():
     if not email or not password:
         return jsonify({"error": "Email and password are required"}), 400
 
-    users_collection = mongo.db.users
     user = users_collection.find_one({"email": email})
 
     if not user:
@@ -527,12 +543,51 @@ def login():
 @jwt_required()
 def check_password_expiry():
     current_user = get_jwt_identity()
+    print(current_user)
     return is_password_expired(current_user)
+
+@app.route('/validate-password-user', methods=['POST'])
+def scan_password_user():
+    data = request.get_json()
+    
+    if not data or 'password' not in data:
+        return jsonify({"error": "Missing 'password' field in request body."}), 400
+
+    password = data['password']
+    email = data['email']
+    
+    
+    user = users_collection.find_one({"email": email})
+
+    if not user:
+        return jsonify({"error": "Invalid email address. No user found with the provided email."}), 401
+
+    if not isinstance(password, str):
+        return jsonify({"error": "Password must be a string."}), 400
+    
+    
+    password_analysis_status = user["password_analysis_status"]
+    password_analysis_report = user["password_analysis_report"]
+    
+    if password_analysis_status=="true" and password_analysis_report["password"]==password:
+        return jsonify({"result": password_analysis_report}), 200
+    
+    
+    result = validate_password(password)
+    
+    update_result = users_collection.update_one(
+        {"email":email},
+        {"$set":{"password_analysis_status":"true","password_analysis_report":result}}
+    )
+    print(update_result)
+    
+    return jsonify({"result": result}), 200
+
 
 @app.route('/validate-password', methods=['POST'])
 def scan_password():
     data = request.get_json()
-
+    
     if not data or 'password' not in data:
         return jsonify({"error": "Missing 'password' field in request body."}), 400
 
@@ -540,11 +595,9 @@ def scan_password():
 
     if not isinstance(password, str):
         return jsonify({"error": "Password must be a string."}), 400
-
+    
     result = validate_password(password)
-
     return jsonify({"result": result}), 200
-
 
 
 # admin routes
@@ -619,7 +672,7 @@ def compositionAnalysis():
         return jsonify({"error": "Missing 'password' field in request"}), 400
     
     password = data['password']
-    result = password_strength_generator(password)
+    result = password_strength_meter(password)
     time.sleep(5)
     return jsonify(result), 200
 
@@ -645,7 +698,7 @@ def generate_strong_password_api():
         return jsonify({"status": "error", "message": "Missing 'weak_password'"}), 400
 
     try:
-        result = generate_strong_password(password)
+        result = generate_strong_password_using_gemini(password)
         return jsonify({
             "status": "success",
             "input_password": password,
@@ -732,51 +785,6 @@ def getFile(id):
         return jsonify({'error': str(e)}), 500
     
 @app.route('/validate-bulk-password', methods=['POST'])
-# def validate_bulk_password():
-#     if 'file' not in request.files:
-#         return jsonify({'error': 'No file part'}), 400
-
-#     file = request.files['file']
-
-#     if file.filename == '':
-#         return jsonify({'error': 'No selected file'}), 400
-
-#     try:
-#         # Step 1: Read uploaded CSV
-#         df = pd.read_csv(file)
-
-#         if 'password' not in df.columns:
-#             return jsonify({'error': 'CSV must contain a "password" column'}), 400
-
-#         # Step 2: Apply password validation
-#         def validate_or_mark(password):
-#             if len(str(password)) > 30:
-#                 return "Very Strong"  # Directly mark
-#             else:
-#                 return validate_single_password(password)  # Otherwise validate normally
-
-#         df['status'] = df['password'].apply(validate_or_mark)
-
-#         # Step 3: Create output folder
-#         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-#         output_folder = os.path.join(BASE_DIR, 'output_files')
-#         os.makedirs(output_folder, exist_ok=True)  
-
-#         # Step 4: Save the CSV
-#         output_file_path = os.path.join(output_folder, 'password_status_output.csv')
-#         df.to_csv(output_file_path, index=False)
-
-#         # Step 5: Convert results to dictionary for JSON response
-#         results = df[['password', 'status']].to_dict('records')
-
-#         return jsonify({
-#             'message': 'Validation completed successfully!',
-#             'outputFile': results[:100],
-#             'downloadUrl': 'http://localhost:5000/download/password_status_output.csv'
-#         }), 200
-
-#     except Exception as e:
-#         return jsonify({'error': str(e)}), 500
 def validate_bulk_password():
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'}), 400
@@ -848,6 +856,56 @@ def userReq():
     password = data.get("password")
     user_req = data.get("user_req")
     return generate_strong_user_req_password(password,user_req)
+
+
+
+@app.route('/breach-detection',methods=['POST'])    
+def breachDetection():
+    data = request.json
+    password = data.get("password")
+    result = leaked_password_detector(password)
+    result =   format_l1_result(result)
+    return result
+
+@app.route('/pattern-detection',methods=['POST'])    
+def patternDetection():
+    data = request.json
+    password = data.get("password")
+    result = ban_words_identification(password)
+    result = format_l2_result(result)
+    return result
+
+@app.route('/composition-detection',methods=['POST'])    
+def compositionDetection():
+    data = request.json
+    password = data.get("password")
+    result = password_strength_meter(password)
+    result = format_l3_result(result)
+    return result
+
+@app.route('/cracktime-detection',methods=['POST'])
+def cracktimeDetection():
+    data = request.json
+    password = data.get("password")
+    result = estimate_crack_time_for_password(password,PASSWORD_TIMEOUT)
+    result = format_l4_result(result)
+    return result
+
+@app.route('/deepfake-detection', methods=['POST'])
+def deepfakeDetection():
+    if 'password_audio' not in request.files:
+        return {'error': 'No audio file provided'}, 400
+    
+    audio_file = request.files['password_audio']
+    
+    if audio_file.filename == '':
+        return {'error': 'No selected file'}, 400
+    
+    if audio_file:
+        # Your analysis logic here
+        status, result = analyze_audio(audio_file)
+        return {"status":status,"result":result}
+
 
 # Main runner
 if __name__=="__main__":

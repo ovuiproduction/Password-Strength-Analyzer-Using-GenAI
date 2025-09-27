@@ -3,7 +3,6 @@ import json
 import ollama
 import re
 
-
 # Analyze password
 def analyze_password(password):
     result = zxcvbn(password)
@@ -41,8 +40,7 @@ def analyze_password(password):
 
     return weaknesses, result['guesses_log10'], result.get('feedback', {})
 
-
-def generate_strong_password(weak_password):
+def generate_strong_password_using_mistral(weak_password):
     weaknesses, entropy, feedback = analyze_password(weak_password)
     weaknesses_text = "\n".join(f"- {w}" for w in weaknesses) if weaknesses else "No major weaknesses found."
 

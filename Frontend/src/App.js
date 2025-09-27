@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-
 import CoverPage from './pages/CoverPage';
 import Dashboard from "./pages/Dashboard";
 import AnalysisPage from "./pages/AnalysisPage";

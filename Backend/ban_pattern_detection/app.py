@@ -133,11 +133,13 @@ def analyze_password_variants(password, custom_inputs):
         "suggestions": normalized_result.get("feedback", {}).get("suggestions", [])
     }
 
-    return {
+    result = {
         "original_password_analysis": original_data,
         "normalized_password_analysis": normalized_data,
         "normalized_is_weaker": normalized_data["score"] < original_data["score"]
     }
+    # print(result)
+    return result
 
 def ban_words_identification(password):
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -161,6 +163,62 @@ def analyze_password_variants_zxcvbn(password):
     elif entropy_score >= 25 : status = "very strong"
     return status
 
+
+def format_l2_result(result):
+    def filter_patterns(patterns):
+        filtered = []
+        for p in patterns:
+            # Skip bruteforce patterns
+            if p.get("pattern") == "bruteforce":
+                continue
+                
+            # Include patterns without matched_word OR with matched_word length >= 3
+            matched_word = p.get("matched_word")
+            if matched_word is None or len(matched_word) >= 3:
+                filtered.append({
+                    "pattern": p.get("pattern"),
+                    "token": p.get("token"),
+                    "dictionary_name": p.get("dictionary_name"),
+                    "matched_word": matched_word
+                })
+        return filtered
+
+    def format_password_result(data):
+        filtered_patterns = filter_patterns(data.get("patterns", []))
+        return {
+            "status": bool(filtered_patterns),
+            "patterns": filtered_patterns,
+            "warning": data.get("warning", ""),
+            "suggestions": data.get("suggestions", [])
+        }
+
+    original = result.get("original_password_analysis", {})
+    normalized = result.get("normalized_password_analysis", {})
+    is_weaker = result.get("normalized_is_weaker", False)
+
+    original_formatted = format_password_result(original)
+    formatted_result = {
+        "original_password_result": original_formatted,
+        "normalized_is_weaker": is_weaker
+    }
+
+    if is_weaker:
+        normalized_formatted = format_password_result(normalized)
+        formatted_result["normalized_password_result"] = normalized_formatted
+        formatted_result["explain"] = (
+            f"The normalized password is considered weaker because it has a lower strength score "
+            f"({normalized.get('score', 0)}) compared to the original ({original.get('score', 0)}), "
+            f"and a lower entropy ({normalized.get('entropy', 0.0)} vs {original.get('entropy', 0.0)}), "
+            f"making it more susceptible to guessing attacks."
+        )
+        # Include status from normalized as well if present
+        final_status = original_formatted["status"] or normalized_formatted["status"]
+    else:
+        final_status = original_formatted["status"]
+
+    formatted_result["status"] = final_status
+
+    return formatted_result
 
 
 

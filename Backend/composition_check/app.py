@@ -122,7 +122,7 @@ def clean_shap_impact(shap_dict, round_to=3):
     return cleaned
 
 
-def password_strength_generator(password):
+def password_strength_meter(password):
     features_dic,features = extract_features(password)
     df_input = pd.DataFrame([features], columns=feature_names)
     processed = preprocessor.transform(df_input)
@@ -140,6 +140,83 @@ def password_strength_generator(password):
         "shap_impact": feature_importance
     }
     
+
+
+PASSWORD_CONSTRAINTS = {
+    "length": {"min": 12},                   # Minimum 8 characters
+    "entropy": {"min": 15},                 # Minimum entropy threshold
+    "shannon_entropy": {"min": 2.5},         # Shannon entropy minimum
+    "num_unique_chars": {"min": 5},          # At least 5 unique characters
+    "unique_char_ratio": {"min": 0.5},       # At least 50% unique characters
+    "has_upper_lower": {"required": True},   # Should have both uppercase and lowercase
+    "digit_ratio": {"min": 0.1},             # At least 10% digits
+    "special_ratio": {"min": 0.1},           # At least 10% special characters
+    "upper_case_ratio": {"min": 0.1},         # Minimum 10% uppercase
+    "lower_case_ratio": {"min": 0.1},         # Minimum 10% lowercase
+    "num_repeated_chars": {"max": 2},         # Maximum 2 repeated chars allowed
+    "dictionary_match_count": {"max": 1}      # Maximum 1 dictionary match
+}
+
+
+def format_l3_result(result):
+    features = result.get("features", {})
+    shap_impact = result.get("shap_impact", {})
+    score = round(result.get("score", 0), 2)
+
+    relevant_feature_keys = PASSWORD_CONSTRAINTS.keys()
+
+    # Filter relevant features and add score
+    filtered_features = {
+        key: features.get(key, 0)
+        for key in relevant_feature_keys
+        if key in features
+    }
+    filtered_features["score"] = score
+
+    # Check constraints
+    status = False
+    failed_conditions = []
+
+    for key, conditions in PASSWORD_CONSTRAINTS.items():
+        feature_value = features.get(key, 0)
+
+        for condition_type, condition_value in conditions.items():
+            if condition_type == "min" and feature_value < condition_value:
+                status = True
+                failed_conditions.append({
+                    "feature": key,
+                    "expected": f"min {condition_value}",
+                    "actual": feature_value
+                })
+            if condition_type == "max" and feature_value > condition_value:
+                status = True
+                failed_conditions.append({
+                    "feature": key,
+                    "expected": f"max {condition_value}",
+                    "actual": feature_value
+                })
+            if condition_type == "required" and not feature_value:
+                status = True
+                failed_conditions.append({
+                    "feature": key,
+                    "expected": "required True",
+                    "actual": feature_value
+                })
+
+    strength = "Strong" if status else "Weak"
+
+    if score == 0 : status = True
+
+    formatted_result = {
+        "score":score,
+        "features": filtered_features,
+        "shap_impact": shap_impact,
+        "strength": strength,
+        "status": status,
+        "failed_conditions": failed_conditions
+    }
+
+    return formatted_result
 
 # password = "summar@124"
 # print(password_strength_generator(password))
