@@ -152,9 +152,8 @@ Password-Strength-Analysis-Using-GenAI/
 │   │   ├── app.py
 │   │   ├── add_ban_words.py
 │   │   └── ban_words_collection/
-│   │       ├── banned_words_1.pkl ... banned_words_6.pkl
-│   │       └── ReadMe.md
-│   │   
+│   │       └── banned_words_1.pkl ... banned_words_6.pkl
+│   │       
 │   ├── composition_check/
 │   │   ├── app.py
 │   │   ├── models/
@@ -164,6 +163,7 @@ Password-Strength-Analysis-Using-GenAI/
 │   │   │      └── app.py
 │   │   └── train_models
 │   │         └── app.py
+│   │
 │   ├── crack_time_estimator/
 │   │   ├── app.py
 │   │   ├── password.txt
@@ -183,7 +183,6 @@ Password-Strength-Analysis-Using-GenAI/
 │   │       ├── bloom_00.pkl ... bloom_ff.pkl
 │   │       └── ReadMe.md
 │   │   
-│   │
 │   ├── PII_detector/
 │   │   └── app.py
 │   │   
