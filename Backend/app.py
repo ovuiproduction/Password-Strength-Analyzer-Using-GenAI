@@ -14,6 +14,11 @@ from zxcvbn import zxcvbn
 import pandas as pd
 from flask import send_from_directory
 from concurrent.futures import ThreadPoolExecutor
+import io
+from pydub import AudioSegment
+from pydub.utils import which
+
+AudioSegment.converter = which("ffmpeg")
 
 load_dotenv()
 
@@ -894,18 +899,40 @@ def cracktimeDetection():
 @app.route('/deepfake-detection', methods=['POST'])
 def deepfakeDetection():
     if 'password_audio' not in request.files:
-        return {'error': 'No audio file provided'}, 400
+        return {"status": 400, "result": {"error": "No audio file provided"}}, 400
     
     audio_file = request.files['password_audio']
     
-    if audio_file.filename == '':
-        return {'error': 'No selected file'}, 400
-    
-    if audio_file:
-        # Your analysis logic here
-        status, result = analyze_audio(audio_file)
-        return {"status":status,"result":result}
+    # ---------------------------
+    # If recorded mic input (WEBM)
+    # ---------------------------
+    if audio_file.mimetype == 'audio/webm':
+        temp_webm = "temp_input.webm"
+        audio_file.save(temp_webm)
 
+        audio = AudioSegment.from_file(temp_webm, format="webm")
+        wav_io = io.BytesIO()
+        audio.export(wav_io, format="wav")
+
+        # cleanup temp file
+        os.remove(temp_webm)
+
+        # Make BytesIO act like file upload
+        wav_io.seek(0)
+        wav_file = wav_io
+        wav_file.filename = "converted.wav"
+
+        status, result = analyze_audio(wav_file)
+        return {"status": status, "result": result}, 200
+    
+    # ---------------------------
+    # If user uploads regular audio file (WAV/MP3)
+    # ---------------------------
+    if audio_file.filename == '':
+        return {"status": 400, "result": {"error": "No selected file"}}, 400
+    
+    status, result = analyze_audio(audio_file)
+    return {"status": status, "result": result}, 200
 
 # Main runner
 if __name__=="__main__":

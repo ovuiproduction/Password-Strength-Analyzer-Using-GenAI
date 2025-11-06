@@ -166,3 +166,31 @@
   color: #4b5563; /* muted gray */
   line-height: 1.4;
 }
+
+
+.recording-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.recording-buttons .record-button {
+  background-color: #3498db;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stop-recording:hover {
+  background-color: #e74c3c;
+}
+
+.start-recording:hover {
+  background-color:#27ae60;
+}

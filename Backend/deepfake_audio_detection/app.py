@@ -24,8 +24,10 @@ def extract_features_from_audio(audio_bytes, max_length=500, sr=16000, n_mfcc=40
         # Reshape to match model input
         mfccs = mfccs.reshape(1, mfccs.shape[0], mfccs.shape[1], 1)
         
+        print(mfccs.shape)
         return mfccs
     except Exception as e:
+        print(f"Error extracting features: {e}")
         return None
     
     

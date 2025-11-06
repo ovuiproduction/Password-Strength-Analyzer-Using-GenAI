@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "../styles/DeepfakeAudioDetection.css";
 
 export default function DeepfakeAudioDetection() {
@@ -6,17 +6,90 @@ export default function DeepfakeAudioDetection() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioURL, setAudioURL] = useState(null);
+
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+  const streamRef = useRef(null);
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      streamRef.current = stream;
+
+      // Reset chunks
+      audioChunksRef.current = [];
+
+      const recorder = new MediaRecorder(stream, {
+        mimeType: MediaRecorder.isTypeSupported("audio/webm")
+          ? "audio/webm"
+          : "audio/mp4",
+      });
+
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          audioChunksRef.current.push(e.data);
+        }
+      };
+
+      recorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: recorder.mimeType,
+        });
+
+        const file = new File([audioBlob], "recorded_audio.webm", {
+          type: recorder.mimeType,
+        });
+
+        const url = URL.createObjectURL(audioBlob);
+        setAudioURL(url);
+        setSelectedFile(file);
+
+        // Stop all tracks
+        if (streamRef.current) {
+          streamRef.current.getTracks().forEach((track) => track.stop());
+        }
+      };
+
+      recorder.start(100); // Collect data every 100ms
+      mediaRecorderRef.current = recorder;
+      setIsRecording(true);
+      setError("");
+      setResult(null);
+      setAudioURL(null);
+    } catch (err) {
+      setError("Microphone access denied. Please allow mic permissions.");
+      console.error("Recording error:", err);
+    }
+  };
+
+  const stopRecording = () => {
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state !== "inactive"
+    ) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Check if file is audio type
       if (!file.type.startsWith("audio/")) {
         setError("Please select an audio file");
         setSelectedFile(null);
         return;
       }
+
+      // Clean up previous audio URL
+      if (audioURL) {
+        URL.revokeObjectURL(audioURL);
+      }
+
       setSelectedFile(file);
+      setAudioURL(URL.createObjectURL(file));
       setError("");
       setResult(null);
     }
@@ -47,7 +120,7 @@ export default function DeepfakeAudioDetection() {
 
       const data = await response.json();
       console.log(data);
-      if (data.status != 200) {
+      if (data.status !== 200) {
         setError(data.result.error);
       }
       setResult(data.result);
@@ -57,7 +130,6 @@ export default function DeepfakeAudioDetection() {
       setIsAnalyzing(false);
     }
   };
-
   return (
     <div className="dashboard-right-content">
       <div className="dashboard-content-header">
@@ -78,8 +150,23 @@ export default function DeepfakeAudioDetection() {
             <label htmlFor="audio-upload" className="file-input-label">
               Choose Audio File
             </label>
-            {selectedFile && (
-              <span className="file-name">{selectedFile.name}</span>
+          </div>
+
+          <div className="recording-buttons">
+            {!isRecording ? (
+              <button
+                onClick={startRecording}
+                className="record-button start-recording"
+              >
+                🎤 Start Recording
+              </button>
+            ) : (
+              <button
+                onClick={stopRecording}
+                className="record-button stop-recording"
+              >
+                ⏹ Stop Recording
+              </button>
             )}
           </div>
 
@@ -91,6 +178,15 @@ export default function DeepfakeAudioDetection() {
             {isAnalyzing ? "Analyzing..." : "Analyze Audio"}
           </button>
         </div>
+
+        {audioURL && (
+          <>
+          <div className="bg-gray-700 rounded-lg p-4">
+            <audio controls src={audioURL} className="w-full" />
+          </div>
+          <span className="file-name">{selectedFile.name}</span>
+          </>
+        )}
 
         {error && <div className="error-message">{error}</div>}
 
