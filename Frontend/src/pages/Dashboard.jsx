@@ -31,6 +31,7 @@ import CompositionAnalysis from "../components/CompositionAnalysis";
 import CracktimeEstimation from "../components/CracktimeDetection";
 import AdminControlPanel from "../components/AdminControlPanel";
 import DeepfakeAudioDetection from "../components/DeepfakeAudioDetection";
+import EnrollAudioPassword from "../components/EnrollAudioPassword";
 
 const Dashboard = () => {
   const [showResetModal, setShowResetModal] = useState(false);
@@ -88,6 +89,7 @@ const Dashboard = () => {
     },
     { id: "cracktime", label: "Crack Time Estimation", icon: <FiClock /> },
     { id: "complete", label: "Complete Password Checkup", icon: <FiShield /> },
+    { id: "enroll-audio-password", label: "enroll-audio-password", icon: <FiMic /> },
     { id: "deepfake", label: "Deepfake Voice Detection", icon: <FiMic /> },
     { id: "admin", label: "Admin Control Panel", icon: <FiSettings /> },
   ];
@@ -314,8 +316,12 @@ const Dashboard = () => {
       case "admin":
         return <AdminControlPanel />;
 
+      case "enroll-audio-password":
+        return <EnrollAudioPassword />;
+
       case "deepfake":
         return <DeepfakeAudioDetection />;
+
 
       default:
         return (

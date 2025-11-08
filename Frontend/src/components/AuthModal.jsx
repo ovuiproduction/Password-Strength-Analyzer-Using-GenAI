@@ -54,6 +54,7 @@ const LoginForm = ({ switchForm, closeModal }) => {
       );      
       localStorage.setItem('token', res.data.token);
       // const { password_analysis_status, password_analysis } = res.data;
+      sessionStorage.setItem("user", JSON.stringify(res.data.user));
       toast.success("Login successful!");
       closeModal();
       navigate('/dashboard', { state: { user_password: password,user_email:email } });

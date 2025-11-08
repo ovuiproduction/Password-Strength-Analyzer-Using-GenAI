@@ -17,6 +17,19 @@ from concurrent.futures import ThreadPoolExecutor
 import io
 from pydub import AudioSegment
 from pydub.utils import which
+import numpy as np
+import torch
+import torchaudio
+import re
+from io import BytesIO
+
+from speechbrain.inference.speaker import SpeakerRecognition
+# Load once globally
+verification = SpeakerRecognition.from_hparams(source="speechbrain/spkrec-ecapa-voxceleb", savedir="pretrained_models/spkrec-ecapa-voxceleb")
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_DIR = os.path.join(BASE_DIR, "voice_samples")
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 AudioSegment.converter = which("ffmpeg")
 
@@ -420,6 +433,7 @@ def signup():
             "updated_at": datetime.now(timezone.utc),
             "password_analysis_status":"false",
             "password_analysis_report":{},
+            "audio_password":"",
         }
         
         insert_result = users_collection.insert_one(user_data)
@@ -537,10 +551,7 @@ def login():
 
     return jsonify({
         "message": "Login successful",
-        "user": {
-            "email": user["email"],
-            "id": user_id 
-        },
+        "user": user,
         "token": token
     }), 200
 
@@ -933,6 +944,192 @@ def deepfakeDetection():
     
     status, result = analyze_audio(audio_file)
     return {"status": status, "result": result}, 200
+
+
+
+def save_audio_file(raw_bytes, user_id, suffix="enroll"):
+    filename = f"{user_id}_{suffix}_{int(datetime.now().timestamp())}.wav"
+    filepath = os.path.join(UPLOAD_DIR, filename)
+
+    # load raw bytes
+    waveform, sr = torchaudio.load(io.BytesIO(raw_bytes))
+
+    # convert to mono 16k
+    waveform = torchaudio.transforms.Resample(sr, 16000)(waveform)
+    if waveform.size(0) > 1:
+        waveform = waveform.mean(dim=0, keepdim=True)
+
+    torchaudio.save(filepath, waveform, 16000)
+    return filepath
+
+
+def read_audio_bytes_from_request():
+    """
+    Accepts either multipart/form-data (audio file) or JSON (audio_base64).
+    Returns raw bytes, transcript, user_id.
+    """
+    if request.content_type and "multipart/form-data" in request.content_type:
+        file = request.files.get("audio")
+        if not file:
+            raise ValueError("audio file is required")
+        raw = file.read()
+        transcript = request.form.get("transcript", "")
+        user_id = request.form.get("user_id")
+        return raw, transcript, user_id
+    else:
+        data = request.get_json(silent=True) or {}
+        b64 = data.get("audio_base64")
+        if not b64:
+            raise ValueError("audio_base64 (JSON) or 'audio' (form) is required")
+        import base64
+        try:
+            raw = base64.b64decode(b64)
+        except Exception:
+            raise ValueError("Invalid base64 audio")
+        transcript = data.get("transcript", "")
+        user_id = data.get("user_id")
+        return raw, transcript, user_id
+
+
+@app.route("/update-audio-password", methods=["POST"])
+def update_audio_password():
+    try:
+        raw, transcript, user_id = read_audio_bytes_from_request()
+        if not user_id:
+            return jsonify({"error": "user_id is required"}), 400
+
+        user = users_collection.find_one({"_id": ObjectId(user_id)})
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        file_path = save_audio_file(raw, user_id, "enroll")
+        
+        ref_file = user["audio_password_file"]
+        if os.path.exists(ref_file):
+            os.remove(ref_file)
+
+        users_collection.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$set": {
+                "voice_enrolled": True,
+                "audio_password_file": file_path,
+                "passphrase_text": transcript,
+                "updated_at": datetime.now(timezone.utc)
+            }}
+        )
+
+        return jsonify({
+            "message": "Voice password saved",
+            "audio_file": file_path,
+            "passphrase_text": transcript
+        }), 200
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+def normalize_text(text: str) -> str:
+    """Normalize transcript text for secure comparison."""
+    if not text:
+        return ""
+
+    # Lowercase
+    text = text.lower().strip()
+
+    # Replace multiple spaces with a single space
+    text = re.sub(r"\s+", " ", text)
+
+    # Keep only letters, numbers, and spaces
+    text = re.sub(r"[^a-z0-9\s]", "", text)
+
+    # Trim again
+    return text.strip()
+
+def verify_audio(file1,file2):
+    # ✅ Normalize Windows paths for torchaudio
+    file1 = file1.replace("\\", "/")
+    file2 = file2.replace("\\", "/")
+
+    # ✅ Ensure files exist
+    if not os.path.exists(file1):
+        print("❌ File1 not found:", file1)
+        return
+    if not os.path.exists(file2):
+        print("❌ File2 not found:", file2)
+        return
+
+    score, prediction = verification.verify_files(file1, file2)
+    if hasattr(prediction, "item"):
+        prediction = prediction.item()
+    elif isinstance(prediction, (list, tuple)):
+        prediction = prediction[0]
+
+    return float(score), prediction
+
+@app.route("/verify-audio-password", methods=["POST"])
+def voice_login():
+    try:
+        raw, transcript, user_id = read_audio_bytes_from_request()
+        if not user_id:
+            return jsonify({"error": "user_id is required"}), 400
+
+        user = users_collection.find_one({"_id": ObjectId(user_id)})
+        if not user or not user.get("voice_enrolled"):
+            return jsonify({"error": "No enrolled voice"}), 400
+
+        ref_file = user["audio_password_file"]
+        live_file = save_audio_file(raw, user_id, "verify")
+    
+        similarity, prediction = verify_audio(ref_file, live_file)
+        
+        if os.path.exists(live_file):
+            os.remove(live_file)
+        
+        audio_buffer = BytesIO(raw)
+        deepfakeStatus, deepFakeResult = analyze_audio(audio_buffer)
+        
+        deepfake_check = ""
+        if deepfakeStatus == 200 and deepFakeResult.get("is_deepfake") == True:
+            deepfake_check = "Deepfake Audio Detected"
+        elif deepfakeStatus == 200 and deepFakeResult.get("is_deepfake") == False:
+            deepfake_check = "No Deepfake Detected"
+        else:
+            deepfake_check = "Deepfake Analysis Failed"
+        
+        
+        text_match = normalize_text(transcript) == normalize_text(user.get("passphrase_text", ""))
+
+        THRESHOLD = 0.5  # SpeechBrain default suggested
+
+        success = (similarity >= THRESHOLD) and text_match and (prediction == 1) and (deepfakeStatus==200 and deepFakeResult.get("is_deepfake")==False)
+        
+        speaker_match = ""
+        if success:
+            speaker_match = "Successfully Verified Speaker"
+        else:
+            if similarity < THRESHOLD or prediction != 1:
+                speaker_match = "Speaker Mismatch Detected"
+            elif not text_match:
+                speaker_match = "Text Mismatch Detected"
+            elif deepFakeResult.get("is_deepfake") == True:
+                speaker_match = "Deepfake Audio Detected"
+            else:
+                speaker_match = "Verification Failed"
+            
+            
+        return jsonify({
+            "similarity_score": similarity,
+            "speaker_match": speaker_match,
+            "text_match": text_match,
+            "deepfake_check": deepfake_check,
+            "deepfake_confidence": deepFakeResult.get("confidence"),
+            "authenticated": success
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 
 # Main runner
 if __name__=="__main__":

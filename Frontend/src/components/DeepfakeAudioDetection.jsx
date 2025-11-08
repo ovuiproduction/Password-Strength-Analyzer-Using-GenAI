@@ -137,6 +137,8 @@ export default function DeepfakeAudioDetection() {
         <p>Advanced detection of synthetic voice attacks</p>
       </div>
 
+      
+
       <div className="deepfake-detection-card">
         <div className="audio-upload-section">
           <div className="file-input-container">
@@ -207,9 +209,8 @@ export default function DeepfakeAudioDetection() {
               <div className="confidence-level">
                 Confidence: {result.confidence}%
                 <p className="confidence-explanation">
-                  This percentage shows how sure the system is about its
-                  decision. A higher value means the audio is more likely fake,
-                  while a lower value means it may be real.
+                This percentage indicates how likely the audio is synthetic. A higher value
+                suggests the audio is more likely to be fake.
                 </p>
               </div>
 
