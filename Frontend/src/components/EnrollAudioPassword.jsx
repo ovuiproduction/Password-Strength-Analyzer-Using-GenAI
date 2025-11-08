@@ -245,7 +245,9 @@ export default function EnrollAudioPassword() {
 
       const res = await fetch(url, { method: "POST", body: fd });
       const json = await res.json();
-      setLastResponse(json);
+      if (busyAction === "verify") {
+        setLastResponse(json);
+      }
       addLog(`${url} response`, json);
     } catch (e) {
       addLog("Request error", e?.message || e);
