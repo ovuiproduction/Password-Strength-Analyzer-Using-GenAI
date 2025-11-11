@@ -36,7 +36,7 @@ The goal of this system is to **analyze the strength of a password** through **m
 
 ## 🔐 Multi-Layered Architecture
 
-This system evaluates passwords across **five key layers**, each simulating a real-world attack vector or analysis dimension:
+This system evaluates passwords across **Six key layers**, each simulating a real-world attack vector or analysis dimension:
 
 ---
 
@@ -96,6 +96,14 @@ The system returns an **aggregated strength score**, visual feedback, and intell
 
 ---
 
+## Audio Based Password Verification
+- User can enroll audio as a password
+- System able be verify exact speaker and audio password
+- Also it is able to detect the deepfake audio
+
+
+---
+
 ## 🧪 Features Overview
 | Feature                             | Description                                                                 |
 |-------------------------------------|-----------------------------------------------------------------------------|
@@ -113,6 +121,7 @@ The system returns an **aggregated strength score**, visual feedback, and intell
 | **Password History Check**             | Prevents reuse of recent passwords                                         |
 | **Admin Control Panel**                | Configure organizational security policies                                 |
 | **Enterprise Password Uniqueness**     | Ensures password uniqueness across teams                                   |
+| **Audio-based password workflows**    |  Audio based password verification with deepfake analysis |
 | **AI Feedback**                         | Explains weaknesses and gives personalized suggestions                     |
 
 ---
@@ -129,6 +138,9 @@ The system returns an **aggregated strength score**, visual feedback, and intell
 - **JWT (JSON Web Tokens)**
 - **React.js (Frontend)**
 - **Flask (Backend)**
+- **SpeechBrain Library (Speaker verification)**
+- **AssemblyAI API (Audio Transcription)**
+- **CNN & BiLSTM (Deepfake Detection)**
 
 ---
 
