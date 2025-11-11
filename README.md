@@ -95,7 +95,7 @@ The system returns an **aggregated strength score**, visual feedback, and intell
 - Includes **interactive update system** that lets users modify generated passwords (e.g., change structure, add memorable phrases).
 
 ---
-## Audio-Based Password Verification
+## 🎙️ Audio-Based Password Verification
 - Users can enroll audio as a password
 - System verifies the speaker and audio password
 - Detects deepfake audio
