@@ -74,12 +74,13 @@ const PasswordResultModalBoard = ({ data, onResetClick }) => {
         </div>
 
         {/* Banned Words Detection */}
-        <div
+        {/* <div
           className={`result-card ${
             data["Banned-Words-Detection"]?.status ? "vulnerable" : "safe"
           }`}
         >
           <h4>🛑 Banned Patterns</h4>
+         
           <div className="status-indicator">
             Status:{" "}
             <span className="status-text">
@@ -87,7 +88,9 @@ const PasswordResultModalBoard = ({ data, onResetClick }) => {
             </span>
           </div>
 
-          {data["Banned-Words-Detection"]?.original_password_result?.status && (
+          </div> */}
+
+          {/* {data["Banned-Words-Detection"]?.original_password_result?.status && (
             <>
               <div className="pattern-section">
                 <h5>Original Password Issues</h5>
@@ -116,7 +119,6 @@ const PasswordResultModalBoard = ({ data, onResetClick }) => {
               )}
             </>
           )}
-
           {data["Banned-Words-Detection"]?.normalized_is_weaker && (
             <>
               <div className="pattern-section">
@@ -148,8 +150,108 @@ const PasswordResultModalBoard = ({ data, onResetClick }) => {
                 </p>
               </div>
             </>
-          )}
-        </div>
+          )} */}
+
+          
+        
+
+        {data["Banned-Words-Detection"] && (
+          <div
+            className={`pattern-result ${data["Banned-Words-Detection"].status ? "flagged" : "safe"}`}
+          >
+            <div
+          className={`result-card ${
+            data["Banned-Words-Detection"]?.status ? "vulnerable" : "safe"
+          }`}
+        >
+          <h4>🛑 Banned Patterns</h4>
+         
+          <div className="status-indicator">
+            Status:{" "}
+            <span className="status-text">
+              {data["Banned-Words-Detection"]?.status ? "Vulnerable" : "Secure"}
+            </span>
+          </div>
+
+          </div>
+            <h4>
+              {data["Banned-Words-Detection"].status
+                ? "Sensitive patterns detected"
+                : "No PII or banned words found"}
+            </h4>
+
+
+            {/* Original password result */}
+            <section>
+              <h4>Original Password Analysis</h4>
+              {data["Banned-Words-Detection"].original_password_result.patterns.length > 0 ? (
+                
+                <div className="password-patterns">
+                  <table className="pattern-table">
+                    <thead>
+                      <tr>
+                        <th>Pattern</th>
+                        <th>Token</th>
+                        <th>Matched Word</th>
+                        <th>Dictionary</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data["Banned-Words-Detection"].original_password_result.patterns.map(
+                        (p, idx) => (
+                          <tr key={idx}>
+                            <td className="pattern-cell">
+                              <strong>{p.pattern}</strong>
+                            </td>
+                            <td className="token-cell">
+                              {p.token ? (
+                                <span className="token">{p.token}</span>
+                              ) : (
+                                "-"
+                              )}
+                            </td>
+                            <td className="word-cell">
+                              {p.matched_word ? (
+                                <span className="matched-word">
+                                  {p.matched_word}
+                                </span>
+                              ) : (
+                                "-"
+                              )}
+                            </td>
+                            <td className="dictionary-cell">
+                              {p.dictionary_name ? (
+                                <em>{p.dictionary_name}</em>
+                              ) : (
+                                "-"
+                              )}
+                            </td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p>No sensitive patterns found in original password.</p>
+              )}
+              {data["Banned-Words-Detection"].original_password_result.warning && (
+                <p className="warning">
+                  ⚠️ {data["Banned-Words-Detection"].original_password_result.warning}
+                </p>
+              )}
+              {data["Banned-Words-Detection"].original_password_result.suggestions.length > 0 && (
+                <ul className="suggestions">
+                  {data["Banned-Words-Detection"].original_password_result.suggestions.map((s, idx) => (
+                    <li key={idx}>💡 {s}</li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          </div>
+        )}
+
+
 
         {/* Password Strength Analysis */}
         <div

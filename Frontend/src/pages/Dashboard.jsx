@@ -359,8 +359,8 @@ const Dashboard = () => {
           </button>
           <img src={logo} alt="CyberGuard Logo" className="dashboard-logo" />
           <div className="dashboard-brand">
-            <h1 className="dashboard-logo-text">CyberGuard</h1>
-            <span className="dashboard-tagline">Enterprise Security</span>
+            <h1 className="dashboard-logo-text">BhairavX</h1>
+            <span className="dashboard-tagline">Password Security</span>
           </div>
         </div>
 

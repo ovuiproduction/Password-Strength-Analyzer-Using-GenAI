@@ -731,52 +731,52 @@ def validate_single_password(password):
 
 # @app.route('/validate-bulk-password', methods=['POST'])
 # def validate_bulk_password():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
+    # if 'file' not in request.files:
+    #     return jsonify({'error': 'No file part'}), 400
 
-    file = request.files['file']
+    # file = request.files['file']
 
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
+    # if file.filename == '':
+    #     return jsonify({'error': 'No selected file'}), 400
 
-    try:
-        # Step 1: Read uploaded CSV
-        df = pd.read_csv(file)
+    # try:
+    #     # Step 1: Read uploaded CSV
+    #     df = pd.read_csv(file)
 
-        if 'password' not in df.columns:
-            return jsonify({'error': 'CSV must contain a "password" column'}), 400
+    #     if 'password' not in df.columns:
+    #         return jsonify({'error': 'CSV must contain a "password" column'}), 400
 
-        # Step 2: Apply password validation
-        def validate_or_mark(password):
-            if len(str(password)) > 30:
-                return "Very Strong"  # Directly mark
-            else:
-                return validate_single_password(password)  # Otherwise validate normally
+    #     # Step 2: Apply password validation
+    #     def validate_or_mark(password):
+    #         if len(str(password)) > 30:
+    #             return "Very Strong"  # Directly mark
+    #         else:
+    #             return validate_single_password(password)  # Otherwise validate normally
 
-        df['status'] = df['password'].apply(validate_or_mark)
+    #     df['status'] = df['password'].apply(validate_or_mark)
 
-        # Step 3: Create a smaller DataFrame
-        status_df = df[['password', 'status']]
+    #     # Step 3: Create a smaller DataFrame
+    #     status_df = df[['password', 'status']]
 
-        # Step 4: Prepare folder and file path
-        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        output_folder = os.path.join(BASE_DIR, 'output_files')
+    #     # Step 4: Prepare folder and file path
+    #     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    #     output_folder = os.path.join(BASE_DIR, 'output_files')
         
-        # ✅ Create output folder if it doesn't exist
-        os.makedirs(output_folder, exist_ok=True)  
+    #     # ✅ Create output folder if it doesn't exist
+    #     os.makedirs(output_folder, exist_ok=True)  
 
-        output_file_path = os.path.join(output_folder, 'password_status_output.csv') 
+    #     output_file_path = os.path.join(output_folder, 'password_status_output.csv') 
         
-        # ✅ Save the CSV
-        status_df.to_csv(output_file_path, index=False)
+    #     # ✅ Save the CSV
+    #     status_df.to_csv(output_file_path, index=False)
 
-        # Step 5: Respond
-        return jsonify({
-            'message': 'Validation completed successfully!',
-        }), 200
+    #     # Step 5: Respond
+    #     return jsonify({
+    #         'message': 'Validation completed successfully!',
+    #     }), 200
 
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    # except Exception as e:
+    #     return jsonify({'error': str(e)}), 500
 
 @app.route('/download/<id>', methods=['GET'])
 def getFile(id):

@@ -59,7 +59,7 @@ export default function PatternDetection() {
         </form>
 
         {error && <p className="pattern-error">{error}</p>}
-        {result && <h3>Given Password : {password}</h3>}
+        {result && result.status && <h3 className="given-password-text">Given Password : {result.password}</h3>}
         {result && (
           <div
             className={`pattern-result ${result.status ? "flagged" : "safe"}`}
@@ -68,30 +68,21 @@ export default function PatternDetection() {
               {result.status
                 ? "Sensitive patterns detected"
                 : "No PII or banned words found"}
+                <span className="status-pill"></span>
             </h3>
 
             {/* Original password result */}
             <section>
               <h4>Original Password Analysis</h4>
               {result.original_password_result.patterns.length > 0 ? (
-                // <ul>
-                //   {result.original_password_result.patterns.map((p, idx) => (
-                //     <li key={idx}>
-                //       <strong>{p.pattern}</strong>
-                //       {p.token ? p.token : "-"}
-                //       {p.matched_word ? p.matched_word : "-"}
-                //       {p.dictionary_name ? (
-                //         <em>({p.dictionary_name})</em>
-                //       ) : "-"}
-                //     </li>
-                //   ))}
-                // </ul>
+                
                 <div className="password-patterns">
                   <table className="pattern-table">
                     <thead>
                       <tr>
                         <th>Pattern</th>
                         <th>Token</th>
+                        <th>Guesses</th>
                         <th>Matched Word</th>
                         <th>Dictionary</th>
                       </tr>
@@ -110,6 +101,15 @@ export default function PatternDetection() {
                                 "-"
                               )}
                             </td>
+
+                            <td className="token-cell">
+                              {p.guesses ? (
+                                <span className="token">{p.guesses}</span>
+                              ) : (
+                                "-"
+                              )}
+                            </td>
+
                             <td className="word-cell">
                               {p.matched_word ? (
                                 <span className="matched-word">
@@ -150,10 +150,9 @@ export default function PatternDetection() {
             </section>
 
             {/* Normalized password result (if weaker) */}
-            {result && (
+            {result && result.normalized_password_result?.patterns?.length > 0 && (
               <section className="normalized-block">
                 <h4>Normalized Password Analysis</h4>
-                {result.normalized_password_result?.patterns?.length > 0 ? (
                   <ul>
                     {result.normalized_password_result.patterns.map(
                       (p, idx) => (
@@ -164,9 +163,6 @@ export default function PatternDetection() {
                       )
                     )}
                   </ul>
-                ) : (
-                  <p>No sensitive patterns found in normalized password.</p>
-                )}
                 {result.explain && (
                   <p className="explain">🔎 {result.explain}</p>
                 )}

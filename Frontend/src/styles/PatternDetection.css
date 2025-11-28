@@ -404,3 +404,112 @@
     padding: 8px 12px;
   }
 }
+
+.pattern-result h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #0f172a;
+  background: rgba(15,23,42,0.03);
+  border: 1px solid rgba(15,23,42,0.04);
+}
+
+/* Visual style when sensitive patterns are detected (flagged) */
+.pattern-result.flagged h3 {
+  background: rgba(255,59,48,0.06);
+  color: #7b1e1e;
+  border-color: rgba(255,59,48,0.12);
+  box-shadow: 0 1px 0 rgba(255,59,48,0.02) inset;
+}
+
+/* Visual style when safe */
+.pattern-result.safe h3 {
+  background: rgba(16,185,129,0.06);
+  color: #065f46;
+  border-color: rgba(16,185,129,0.12);
+  box-shadow: 0 1px 0 rgba(16,185,129,0.02) inset;
+}
+
+/* Optional small status pill you can embed inside the H3 as a span.status-pill */
+.pattern-result h3 .status-pill {
+  margin-left: auto;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.04);
+  color: #07132b;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+/* Variant pills */
+.pattern-result.flagged h3 .status-pill {
+  background: rgba(255,59,48,0.12);
+  color: #7b1e1e;
+  border-color: rgba(255,59,48,0.18);
+}
+
+.pattern-result.safe h3 .status-pill {
+  background: rgba(16,185,129,0.12);
+  color: #065f46;
+  border-color: rgba(16,185,129,0.18);
+}
+
+/* Responsive tweak */
+@media (max-width: 520px) {
+  .pattern-result h3 {
+    font-size: 0.95rem;
+    padding: 0.45rem 0.6rem;
+  }
+}
+
+/* Result heading styling */
+.pattern-result h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #0f172a;
+  background: rgba(15,23,42,0.03);
+  border: 1px solid rgba(15,23,42,0.04);
+}
+
+/* Visual style when sensitive patterns are detected (flagged) */
+.pattern-result.flagged h3 {
+  background: rgba(255,59,48,0.06);
+  color: #7b1e1e;
+  border-color: rgba(255,59,48,0.12);
+  box-shadow: 0 1px 0 rgba(255,59,48,0.02) inset;
+}
+
+/* Visual style when safe */
+.pattern-result.safe h3 {
+  background: rgba(16,185,129,0.06);
+  color: #065f46;
+  border-color: rgba(16,185,129,0.12);
+  box-shadow: 0 1px 0 rgba(16,185,129,0.02) inset;
+}
+
+.given-password-text {
+  display: inline-block;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #0f172a;
+  background: rgba(15, 23, 42, 0.04);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  word-break: break-word;
+}

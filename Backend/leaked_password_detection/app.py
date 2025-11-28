@@ -172,6 +172,7 @@ def check_password_exist(password):
 def leaked_password_detector(password):
     found, variant, filter_idx = check_password_exist(password)
     result = {
+        "password":password,
         "status": bool(found),
         "variant": variant if found else None
     }
@@ -182,6 +183,7 @@ def leaked_password_detector(password):
 def format_l1_result(result):
     status_flag = result.get("status")
     variant = result.get("variant")
+    password = result.get("password")
     
     if status_flag:
         result_statement = "Your current password has been found in known data breaches or leaked password databases."
@@ -191,7 +193,8 @@ def format_l1_result(result):
     formatted_result = {
         "status": status_flag,
         "variant": variant,
-        "statement": result_statement
+        "statement": result_statement,
+        "password":password
     }
 
     return formatted_result

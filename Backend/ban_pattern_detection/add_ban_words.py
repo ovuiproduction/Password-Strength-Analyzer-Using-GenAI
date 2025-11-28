@@ -19,4 +19,8 @@ def create_indexed_banned_words_pkl(banned_words):
 
     print(f"✅ Created: {output_pkl_path} with {len(banned_words)} words.")
 
-# create_indexed_banned_words_pkl(new_words, output_folder)
+
+# import pandas as pd
+# password_df =  pd.read_csv("./Indian_Names.csv")
+# passwords = password_df['Name'].tolist()
+# create_indexed_banned_words_pkl(passwords)

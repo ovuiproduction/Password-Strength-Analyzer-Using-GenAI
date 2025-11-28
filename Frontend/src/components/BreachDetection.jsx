@@ -64,13 +64,25 @@ export default function BreachDetection() {
 
         {result && (
           <>
-          <h3>Given Password : {password}</h3>
+          {result.variant && (<h3 className="given-password-text">Given Password : {result.password}</h3>)}
           <div className={`breach-result ${result.status ? "breached" : "safe"}`}>
-            <h3>Match Password : {result.variant}</h3>
+            {result.variant && (<h3>Match Password : {result.variant}</h3>)}
             <p>{result.statement}</p>
             <p className="status-label">
               Status: <span>{result.status ? "Breached" : "Safe"}</span>
             </p>
+            {result.variant && 
+            (
+              <>
+              <p>Password check against Breached datasets</p>
+              <ul>
+                <li>RockYou</li>
+                <li>Adobe</li>
+                <li>Linkedln</li>
+              </ul>
+              </>
+            )
+            }
           </div>
            </>
         )}

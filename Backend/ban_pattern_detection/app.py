@@ -73,7 +73,6 @@ def load_banned_words_from_files(folder_path):
     
     return list(all_banned_words)
 
-
 # Check weakest score among all variants
 def get_min_strength_score(password,custom_inputs):
     variants = generate_normalized_variants(password)
@@ -103,6 +102,7 @@ def extract_pattern_info(sequence):
         patterns.append({
             "pattern": item.get("pattern"),
             "token": item.get("token"),
+            "guesses": item.get("guesses"),
             "dictionary_name": item.get("dictionary_name", None),
             "matched_word": item.get("matched_word", None),
             "rank": item.get("rank", None)
@@ -138,7 +138,6 @@ def analyze_password_variants(password, custom_inputs):
         "normalized_password_analysis": normalized_data,
         "normalized_is_weaker": normalized_data["score"] < original_data["score"]
     }
-    # print(result)
     return result
 
 def ban_words_identification(password):
@@ -163,24 +162,23 @@ def analyze_password_variants_zxcvbn(password):
     elif entropy_score >= 25 : status = "very strong"
     return status
 
-
+LIMIT = 10_00_0
 def format_l2_result(result):
     def filter_patterns(patterns):
         filtered = []
         for p in patterns:
             # Skip bruteforce patterns
-            if p.get("pattern") == "bruteforce":
+            if len(p.get("token"))<3 or (p.get("pattern") == "bruteforce" and p.get("guesses")>LIMIT):
                 continue
                 
             # Include patterns without matched_word OR with matched_word length >= 3
-            matched_word = p.get("matched_word")
-            if matched_word is None or len(matched_word) >= 3:
-                filtered.append({
-                    "pattern": p.get("pattern"),
-                    "token": p.get("token"),
-                    "dictionary_name": p.get("dictionary_name"),
-                    "matched_word": matched_word
-                })
+            filtered.append({
+                "pattern": p.get("pattern"),
+                "token": p.get("token"),
+                "guesses":p.get("guesses"),
+                "dictionary_name": p.get("dictionary_name",None),
+                "matched_word": p.get("matched_word",None)
+            })
         return filtered
 
     def format_password_result(data):
@@ -195,6 +193,8 @@ def format_l2_result(result):
     original = result.get("original_password_analysis", {})
     normalized = result.get("normalized_password_analysis", {})
     is_weaker = result.get("normalized_is_weaker", False)
+    
+    password = original["password"]
 
     original_formatted = format_password_result(original)
     formatted_result = {
@@ -217,10 +217,16 @@ def format_l2_result(result):
         final_status = original_formatted["status"]
 
     formatted_result["status"] = final_status
+    formatted_result["password"] = password
 
     return formatted_result
 
 
+
+# result = ban_words_identification("trisha")
+# # print(result)
+# result = format_l2_result(result)
+# print(result)
 
 # def print_result(label,variant, result):
 #     print(f"\n--- {label} - {variant} ---")

@@ -152,7 +152,7 @@ export default function CompositionAnalysis() {
         {/* Results */}
         {result && (
           <div className="composition-results">
-            {password && <>Given Password : {password}</>}
+            {result.password && <h3 className="given-password-text">Given Password : {result.password}</h3>}
             <div className={`result-card overall-strength ${result.features?.score >= 7 ? "strong" : result.features?.score >= 5 ? "moderate" : "weak"}`}>
               <div className="strength-header">
                 <h3>Password Strength Summary</h3>

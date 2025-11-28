@@ -135,6 +135,7 @@ def password_strength_meter(password):
     feature_importance = dict(zip(feature_names, shap_values.values[0]))
     feature_importance = clean_shap_impact(feature_importance)
     return {
+        "password":password,
         "score": round(rf_score, 2),
         "features": features_dic,
         "shap_impact": feature_importance
@@ -159,6 +160,7 @@ PASSWORD_CONSTRAINTS = {
 
 
 def format_l3_result(result):
+    password = result.get("password")
     features = result.get("features", {})
     shap_impact = result.get("shap_impact", {})
     score = round(result.get("score", 0), 2)
@@ -208,6 +210,7 @@ def format_l3_result(result):
     if score == 0 : status = True
 
     formatted_result = {
+        "password":password,
         "score":score,
         "features": filtered_features,
         "shap_impact": shap_impact,

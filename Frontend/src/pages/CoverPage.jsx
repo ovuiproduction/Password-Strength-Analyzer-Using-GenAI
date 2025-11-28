@@ -1,6 +1,7 @@
 // CoverPage.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../images/logo.png"
 import {
   FiLock,
   FiActivity,
@@ -25,7 +26,6 @@ import AuthModal from '../components/AuthModal';
 
 
 const CoverPage = () => {
-  const navigate = useNavigate();
   const [authModalFlag, setAuthModal] = useState(false);
 
   return (
@@ -34,15 +34,16 @@ const CoverPage = () => {
       <header className="cover-header">
         <div className="cover-nav">
           <div className="cover-logo">
-            <FiShield className="logo-icon" />
-            <span>SecurePass</span>
+            <img className="logo-img" src={logo} alt="" />
+            <span className="logo-text">BhairavX</span>
+            <span className="logo-tagline"><br />Born to Protect</span>
           </div>
         </div>
 
         <div className="hero-content">
           <h1>Advanced Password Strength Analysis</h1>
           <p>
-            Protect your digital assets with multi-layered security evaluation
+            Protect your password with multi-layered security evaluation
           </p>
           <button onClick={() => setAuthModal(true)} className="cta-button">
             Login
@@ -184,29 +185,11 @@ const CoverPage = () => {
           <h3>Admin Control Panel</h3>
           <p>Customize password policies and security constraints for your organization</p>
         </div>
-
-
-
-
-
-
       </section>
 
-      {/* CTA Section */}
-      <section className="cta-section">
-        <h2>Start Securing Password</h2>
-        <button
-          className="cta-button secondary"
-          onClick={() => navigate("/home")}
-        >
-          Get Started
-        </button>
+      <section className="footer-cover-page">
+        <p>@BhairavX - Advanced Password Strength Analyzer</p>
       </section>
-
-      <section className="cta-section">
-        <a href="/admin">Admin Panel</a>
-      </section>
-
     </div>
   );
 };

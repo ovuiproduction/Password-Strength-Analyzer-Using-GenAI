@@ -236,3 +236,153 @@
     gap: 0.75rem;
   }
 }
+
+
+/* Breached datasets list */
+.breach-result p {
+    margin: 0.5rem 0;
+    color: #333;
+    font-size: 0.95rem;
+    line-height: 1.35;
+}
+
+/* Make dataset badges compact and readable */
+.breach-result ul {
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.breach-result ul li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.28rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: #222;
+    background: rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.06);
+}
+
+/* Visual variants for breached vs safe */
+.breach-result.breached ul li {
+    background: rgba(255, 68, 68, 0.08);
+    color: #9a1b1b;
+    border-color: rgba(154,27,27,0.12);
+}
+
+.breach-result.safe ul li {
+    background: rgba(34, 197, 94, 0.06);
+    color: #116530;
+    border-color: rgba(17,101,48,0.12);
+}
+
+/* optional small bullet icon */
+.breach-result ul li::before {
+    content: "•";
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+/* spacing when inside small cards */
+.breach-container .breach-result p,
+.breach-container .breach-result ul {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Breached datasets list */
+.breach-result p {
+    margin: 0.5rem 0;
+    color: #333;
+    font-size: 0.95rem;
+    line-height: 1.35;
+}
+
+/* Make dataset badges compact and readable */
+.breach-result ul {
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.breach-result ul li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.28rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: #222;
+    background: rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.06);
+}
+
+/* Visual variants for breached vs safe */
+.breach-result.breached ul li {
+    background: rgba(255, 68, 68, 0.08);
+    color: #9a1b1b;
+    border-color: rgba(154,27,27,0.12);
+}
+
+.breach-result.safe ul li {
+    background: rgba(34, 197, 94, 0.06);
+    color: #116530;
+    border-color: rgba(17,101,48,0.12);
+}
+
+/* optional small bullet icon */
+.breach-result ul li::before {
+    content: "•";
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+/* spacing when inside small cards */
+.breach-container .breach-result p,
+.breach-container .breach-result ul {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.breach-result h3 {
+    display: inline-block;
+    margin: 0 0 0.5rem;
+    padding: 0.28rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1;
+    color: #0f172a;
+    background: rgba(15,23,42,0.04);
+    border: 1px solid rgba(15,23,42,0.06);
+}
+
+/* Visual variant when breached */
+.breach-result.breached h3 {
+    background: rgba(255,68,68,0.09);
+    color: #7b1220;
+    border-color: rgba(123,18,32,0.12);
+}
+
+/* Visual variant when safe */
+.breach-result.safe h3 {
+    background: rgba(34,197,94,0.06);
+    color: #064e3b;
+    border-color: rgba(6,78,59,0.12);
+}
+
+/* Small responsive tweak */
+@media (max-width: 420px) {
+    .breach-result h3 {
+        font-size: 0.9rem;
+        padding: 0.2rem 0.45rem;
+    }
+}
