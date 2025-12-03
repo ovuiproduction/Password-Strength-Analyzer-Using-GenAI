@@ -48,6 +48,7 @@ const Dashboard = () => {
   const [showResetTimeModal, setShowResetTimeModal] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [piiDetector, setPIIDetector] = useState(false);
 
   useEffect(() => {
     const savedSection = sessionStorage.getItem("activeSection");
@@ -337,6 +338,8 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
+
+    
       <ResetPasswordModal
         show={showResetModal}
         onClose={() => setShowResetModal(false)}
