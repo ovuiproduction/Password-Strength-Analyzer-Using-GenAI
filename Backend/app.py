@@ -1045,26 +1045,65 @@ def normalize_text(text: str) -> str:
     # Trim again
     return text.strip()
 
-def verify_audio(file1,file2):
-    # ✅ Normalize Windows paths for torchaudio
-    file1 = file1.replace("\\", "/")
-    file2 = file2.replace("\\", "/")
+# def verify_audio(file1,file2):
+#     # ✅ Normalize Windows paths for torchaudio
+#     file1 = file1.replace("\\", "/")
+#     file2 = file2.replace("\\", "/")
 
-    # ✅ Ensure files exist
-    if not os.path.exists(file1):
-        print("❌ File1 not found:", file1)
-        return
-    if not os.path.exists(file2):
-        print("❌ File2 not found:", file2)
-        return
+#     # ✅ Ensure files exist
+#     if not os.path.exists(file1):
+#         print("❌ File1 not found:", file1)
+#         return
+#     if not os.path.exists(file2):
+#         print("❌ File2 not found:", file2)
+#         return
 
-    score, prediction = verification.verify_files(file1, file2)
-    if hasattr(prediction, "item"):
-        prediction = prediction.item()
-    elif isinstance(prediction, (list, tuple)):
-        prediction = prediction[0]
+#     score, prediction = verification.verify_files(file1, file2)
+#     if hasattr(prediction, "item"):
+#         prediction = prediction.item()
+#     elif isinstance(prediction, (list, tuple)):
+#         prediction = prediction[0]
 
-    return float(score), prediction
+#     return float(score), prediction
+
+def verify_audio(file1, file2):
+    # Load using file handles (Windows safe)
+    with open(file1, "rb") as f:
+        wav1, sr1 = torchaudio.load(f)
+
+    with open(file2, "rb") as f:
+        wav2, sr2 = torchaudio.load(f)
+
+    wav1 = wav1.clone().detach()
+    wav2 = wav2.clone().detach()
+
+    # Resample
+    res1 = torchaudio.transforms.Resample(sr1, 16000)
+    res2 = torchaudio.transforms.Resample(sr2, 16000)
+    wav1 = res1(wav1)
+    wav2 = res2(wav2)
+
+    # Mono
+    if wav1.size(0) > 1:
+        wav1 = wav1.mean(dim=0)
+    else:
+        wav1 = wav1.squeeze(0)
+    if wav2.size(0) > 1:
+        wav2 = wav2.mean(dim=0)
+    else:
+        wav2 = wav2.squeeze(0)
+
+    wav1 = wav1.unsqueeze(0)  # [1, T]
+    wav2 = wav2.unsqueeze(0)
+
+    score, prediction = verification.verify_batch(wav1, wav2)
+
+    # Cleanup
+    torch.cuda.empty_cache()
+    import gc
+    gc.collect()
+
+    return float(score.item()), int(prediction.item())
 
 @app.route("/verify-audio-password", methods=["POST"])
 def voice_login():
