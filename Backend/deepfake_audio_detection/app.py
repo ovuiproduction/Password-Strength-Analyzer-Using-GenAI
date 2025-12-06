@@ -3,6 +3,9 @@ import librosa
 import tensorflow as tf
 import io
 
+# Make sure to have the model file at the specified path
+# All library imports are necessary for audio processing and model loading
+# librosa and ffmpeg are used for audio feature extraction
 
 def extract_features_from_audio(audio_bytes, max_length=500, sr=16000, n_mfcc=40):
     try:

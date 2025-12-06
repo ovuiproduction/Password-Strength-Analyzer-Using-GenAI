@@ -4,6 +4,9 @@ import os
 from dotenv import load_dotenv
 import json
 
+# make sure to set the GEMINI_API_KEY in your .env file
+
+
 # Load API Key
 load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")

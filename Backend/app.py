@@ -66,8 +66,6 @@ from deepfake_audio_detection.app import analyze_audio
 # password variants banword detection
 from ban_pattern_detection.app import analyze_password_variants_zxcvbn
 
-# personally indentifiable information detection
-from PII_detector.app import analyze_pii
 
 # from user_based_password.app_mistral import generate_strong_user_req_password
 from user_based_password.app_gemini import generate_strong_user_req_password
@@ -863,10 +861,6 @@ def validate_bulk_password():
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/analyze-pii',methods=['POST'])
-def analyzePii():
-    data = request.json
-    return analyze_pii(data)
 
 @app.route('/user-req-generate',methods=['POST'])
 def userReq():

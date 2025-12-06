@@ -1,7 +1,5 @@
 # Use this if you want to use Mistral model from Ollama instead of Gemini
 
-
-
 # import json
 # import ollama
 # import re

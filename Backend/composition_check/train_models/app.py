@@ -10,6 +10,8 @@ from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
 from sklearn.metrics import root_mean_squared_error ,r2_score
 
+# run this script to train models and create pkl files for preprocessor and models
+
 import pickle
 
 # -------------------------

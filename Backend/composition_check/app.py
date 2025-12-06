@@ -7,7 +7,7 @@ import shap
 from pathlib import Path
 
 # For password strength prediction using Random Forest model
-# run this first to train the model and create preprocessor and model pkl files
+# first run the train_models/app.py script to create the model and preprocessor pkl files
 
 
 #### SHAP 

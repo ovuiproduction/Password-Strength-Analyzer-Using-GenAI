@@ -4,6 +4,10 @@ import os
 import google.generativeai as genai
 from dotenv import load_dotenv
 
+# Not intrgrated yet
+# Personal Identifiable Information (PII) extraction using Gemini API
+# Make sure to set the GEMINI_API_KEY in your .env file
+
 load_dotenv()
 
 api_key = os.getenv("GEMINI_API_KEY")

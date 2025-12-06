@@ -4,6 +4,10 @@ import pickle
 import os
 from pathlib import Path
 
+# before running this script, make sure you have created bloom filters
+# first run add_ban_words.py script to create pkl files
+# create_indexed_banned_words_pkl run this function and stored in ban_words_collection folder
+
 REVERSE_LEET_MAP = {
     '4': 'a', '@': 'a', '^': 'a', 'λ': 'a',
     '8': 'b', '|3': 'b', 'ß': 'b',

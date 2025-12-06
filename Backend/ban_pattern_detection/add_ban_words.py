@@ -1,6 +1,8 @@
 import os
 import pickle
 
+# run this script to create pkl files for banned words
+
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 output_folder = f"{CURRENT_DIR}\\ban_words_collection"
 
