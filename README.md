@@ -343,7 +343,65 @@ Install system packages as required (ffmpeg, sox) via your OS package manager. E
 sudo apt update && sudo apt install -y ffmpeg sox build-essential git
 ```
 
+### 6) Installing John the Ripper (recommended for crack-time estimations)
+John the Ripper (JTR) provides more realistic crack time estimations. On Windows you have two recommended options:
+
+- Option A — Use WSL (recommended):
+
+```bash
+# in WSL (Ubuntu):
+sudo apt update
+sudo apt install -y john
+# verify
+john --version
+```
+
+- Option B — Prebuilt Windows binaries (jumbo):
+  1. Download a precompiled `john` (Jumbo) from Openwall or a trusted release page.
+  2. Unzip and add the `john` executable directory to your PATH or set `JTR_PATH` in `.env`.
+
+When `JTR_PATH` is provided, the backend will call the binary for crack-time estimation where implemented.
+
+### 7) Gemini API key (Google Generative AI)
+1. Create or obtain an API key for the Gemini (Google Generative) API following Google's docs.
+2. Add the key to your `.env` as `GEMINI_API_KEY`.
+3. Example usage in backend code (`Backend/strong_password_generator/app_gemini.py`):
+
+```py
+import os
+from google.generativeai import client
+
+API_KEY = os.getenv("GEMINI_API_KEY")
+client.configure(api_key=API_KEY)
+# then call the client to create completions
+```
+
+
+### 8) Audio & Deepfake features
+- Install `ffmpeg` and ensure `FFMPEG_PATH` or `ffmpeg` is available on PATH.
+- Install `librosa`, `soundfile`, and `pydub` into the Python environment.
+- For speaker verification use `SpeechBrain` and any pretrained models.
+- For `SpeechBrain` hugging face authentication required
+
+### 9) MongoDB
+- Install MongoDB 
+- Create database with name`password_security`
+- update backend/.env
+
+### 10) Quick run checklist
+1. Start MongoDB
+2. Activate backend venv and install requirements
+3. Set `.env` variables
+4. Start backend: `python Backend/app.py` or `python app.py`
+5. Start frontend: `cd Frontend && npm start`
+
+### 11) Troubleshooting tips
+- If audio packages fail to install, ensure `ffmpeg` and system build tools are installed.
+- If a library throws missing header errors, install your OS C build tools (e.g., `build-essential` on Debian/Ubuntu or MSVC on Windows).
+- For permission problems on Windows, try running from WSL or an elevated shell.
+
 ---
+
 
 ## License 
 
