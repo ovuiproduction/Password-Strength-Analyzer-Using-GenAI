@@ -1,5 +1,11 @@
 # 🔐 Advanced Password Strength Analyzer
 
+### Demo
+```
+https://youtu.be/rRDn0WjzekA
+```
+---
+
 An AI-powered, multi-layered password evaluation and generation system designed to identify vulnerabilities, improve password robustness, and assist users in creating secure yet memorable passwords. It integrates traditional security techniques, statistical analysis, and Generative AI for end-to-end password security enhancement.
 
 <div align="center">
