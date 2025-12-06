@@ -100,13 +100,13 @@ print("RMSE:", rmse)
 # -------------------------
 # Step 8: Save Models and Pipeline
 # -------------------------
-with open("random_forest_model.pkl", "wb") as f:
+with open("models/random_forest_model.pkl", "wb") as f:
     pickle.dump(rf, f)
 
-with open("xgboost_model.pkl", "wb") as f:
-    pickle.dump(xgb, f)
+# with open("xgboost_model.pkl", "wb") as f:
+#     pickle.dump(xgb, f)
 
-with open("scaler_pipeline.pkl", "wb") as f:
-    pickle.dump(pipeline, f)
+# with open("scaler_pipeline.pkl", "wb") as f:
+#     pickle.dump(pipeline, f)
 
 print("\n✅ Models and scaler pipeline saved successfully.")

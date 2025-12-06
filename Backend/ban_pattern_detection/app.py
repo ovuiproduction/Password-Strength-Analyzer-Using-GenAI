@@ -223,6 +223,8 @@ def format_l2_result(result):
 
 
 
+# For testing
+
 # result = ban_words_identification("trisha")
 # # print(result)
 # result = format_l2_result(result)

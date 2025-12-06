@@ -3,6 +3,11 @@ import pickle
 import os
 from itertools import product, islice
 
+# before running this script, make sure you have created bloom filters
+# first run add_leak_words.py script to create pkl files
+# using create_indexed_breached_words_pkl.py script and stored in bloom_filters folder
+
+
 # === CONFIG ===
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 FILTER_DIR = os.path.join(CURRENT_DIR, "bloom_filters")

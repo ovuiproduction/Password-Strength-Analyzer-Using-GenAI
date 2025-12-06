@@ -310,8 +310,7 @@ The app will typically run at `http://localhost:3000`.
 
 ### 4) Run the backend
 
-#### Setup Backend
-**Open each folder in backend and follow the instructions given to run backend as expected**
+## Prerequisites : Open each folder in backend and follow the instructions given in each file to run backend as expected
 
 ```bash
 # if app.py has an app.run guard you can run:

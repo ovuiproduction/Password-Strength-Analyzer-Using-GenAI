@@ -5,11 +5,11 @@ import pickle
 # first download the txt file from
 # https://github.com/danielmiessler/SecLists/tree/master/Passwords
 # use rockyou, linkedin, common-passwords etc
-# store in ban_words folder
+# create and store in ban_words folder
 # then run this script to create pkl files
 
 
-def create_indexed_banned_words_pkl(txt_path, output_folder):
+def create_indexed_breached_words_pkl(txt_path, output_folder):
     # Create the folder if it doesn't exist
     os.makedirs(output_folder, exist_ok=True)
 
@@ -36,4 +36,4 @@ def create_indexed_banned_words_pkl(txt_path, output_folder):
 txt_file = "./ban_words/rockyou.txt"
 output_folder = "ban_words_collection"
 
-create_indexed_banned_words_pkl(txt_file, output_folder)
+create_indexed_breached_words_pkl(txt_file, output_folder)
