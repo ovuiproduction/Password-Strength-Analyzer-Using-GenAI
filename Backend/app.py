@@ -23,6 +23,7 @@ import torchaudio
 import re
 from io import BytesIO
 
+# Huggingface authentication required
 from speechbrain.inference.speaker import SpeakerRecognition
 # Load once globally
 verification = SpeakerRecognition.from_hparams(source="speechbrain/spkrec-ecapa-voxceleb", savedir="pretrained_models/spkrec-ecapa-voxceleb")
@@ -31,6 +32,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_DIR = os.path.join(BASE_DIR, "voice_samples")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
+# ffmpeg path for pydub
 AudioSegment.converter = which("ffmpeg")
 
 load_dotenv()
@@ -87,7 +89,7 @@ mongo = PyMongo(app)
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=7)
 
 # gemini configuration
-API_KEY = os.getenv("API_KEY")
+API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key = API_KEY)
 geminimodel = genai.GenerativeModel("gemini-1.5-flash")
 

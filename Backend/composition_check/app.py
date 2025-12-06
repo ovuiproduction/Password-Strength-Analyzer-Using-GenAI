@@ -6,6 +6,10 @@ from zxcvbn import zxcvbn
 import shap
 from pathlib import Path
 
+# For password strength prediction using Random Forest model
+# run this first to train the model and create preprocessor and model pkl files
+
+
 #### SHAP 
 
 # 0 : ignored no any impact
@@ -245,3 +249,5 @@ def format_l3_result(result):
 #         if user_input.lower() == 'exit':
 #             break
 #         predict_strength(user_input)
+
+

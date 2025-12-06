@@ -20,6 +20,10 @@ def create_indexed_banned_words_pkl(banned_words):
     print(f"✅ Created: {output_pkl_path} with {len(banned_words)} words.")
 
 
+
+# use https://github.com/danielmiessler/SecLists/tree/master/Passwords
+# for create banned words pkl files
+
 # import pandas as pd
 # password_df =  pd.read_csv("./Indian_Names.csv")
 # passwords = password_df['Name'].tolist()

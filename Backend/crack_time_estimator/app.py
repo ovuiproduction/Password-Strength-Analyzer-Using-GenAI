@@ -7,6 +7,11 @@ import os
 import json
 from zxcvbn import zxcvbn
 
+# download john the ripper from
+# https://www.openwall.com/john/#windows
+# and set the path to john.exe below
+
+
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # [MD5, SHA1, SHA256, Bcrypt]

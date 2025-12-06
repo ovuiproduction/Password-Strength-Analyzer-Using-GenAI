@@ -15,7 +15,7 @@ import pickle
 # -------------------------
 # Step 1: Load the Data
 # -------------------------
-df = pd.read_csv("../data_generation/password_strength_dataset.csv")
+df = pd.read_csv("./password_strength_dataset.csv")
 print("Data loaded successfully..")
 # -------------------------
 # Step 2: Basic Exploration

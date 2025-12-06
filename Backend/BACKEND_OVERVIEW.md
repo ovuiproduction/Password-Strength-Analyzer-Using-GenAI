@@ -317,36 +317,6 @@ os, pickle
 
 ---
 
-## 🚀 Setup & Execution
-
-### Prerequisites
-- Python 3.9+
-- MongoDB (local or cloud)
-- ffmpeg (for audio processing)
-- Google Generative AI API key (for LLM features)
-
-### Installation
-```bash
-cd Backend
-python -m venv .venv
-source .venv/bin/activate  # or .venv\Scripts\activate on Windows
-pip install -r requirements.txt
-```
-
-### Configuration (.env)
-```
-MONGO_URI=mongodb://localhost:27017/password_analyzer
-API_KEY=your_google_generativeai_key
-PORT=5000
-```
-
-### Running
-```bash
-python app.py
-# Server runs on http://localhost:5000
-```
-
----
 
 ## 🔄 Module Interdependencies
 

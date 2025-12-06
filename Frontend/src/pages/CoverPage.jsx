@@ -54,7 +54,7 @@ const CoverPage = () => {
       <section className="features-section">
         <div className="feature-card">
           <FiShield className="feature-icon" />
-          <h3>Password Strength Analysis</h3>
+          <h3>Password Strength Analyzer</h3>
           <p>
             Evaluate passwords using breach data, entropy metrics, pattern
             detection, SHAP explainability, and crack time estimations.

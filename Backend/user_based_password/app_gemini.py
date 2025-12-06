@@ -4,7 +4,7 @@ import os
 import google.generativeai as genai
 
 # Load API Key
-api_key = os.getenv("API_KEY")
+api_key = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=api_key)
 
 def generate_strong_user_req_password(weak_password, user_requirement):

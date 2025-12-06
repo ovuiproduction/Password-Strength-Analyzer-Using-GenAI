@@ -239,8 +239,112 @@ Password-Strength-Analysis-Using-GenAI/
 
 ---
 
-## License 
+
+## 🛠 Installation & Setup
+
+Follow these steps to get both backend and frontend running locally. Commands below assume you're on Windows using `bash.exe` (Git Bash / WSL). Adjust package manager commands for your OS as needed.
+
+### 0) Git Clone
+1. open terminal and type
+```bash
+git clone https://github.com/ovuiproduction/Password-Strength-Analyzer-Using-GenAI
+```
+
+### Prerequisites
+- Python 3.10+ (recommend 3.11)
+- Node.js 18+ and npm or yarn
+- MongoDB (local or managed)
+- ffmpeg (for audio processing)
+- Git
+
+If you plan to run deepfake/audio features or use certain ML models, you may also need a working C/C++ build toolchain (MSVC on Windows or build-essential on Linux) and sufficient RAM/GPU support for model inference.
+
+### 1) Backend — create virtual environment & install
+1. Open a bash shell in the `Backend/` folder.
+
+```bash
+cd Backend
+# create virtual environment (venv)
+python -m venv .venv
+
+```
+
+2. Install Python dependencies from `requirements.txt` (file included in `Backend/`):
+
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+If you don't have `requirements.txt`, install these core packages (approx):
+
+```bash
+pip install flask flask-cors python-dotenv pymongo bcrypt flask-jwt-extended pandas numpy scikit-learn xgboost joblib shap zxcvbn-python librosa pydub tensorflow torch soundfile
+```
+
+Note: some packages (e.g., `librosa`, `pydub`, `ffmpeg`, `SpeechBrain`) require system libraries. Install `ffmpeg` separately (see below).
+
+### 2) Frontend & Backend — environment variables
+1. Rename Backend/.env.example to Backend/.env
+2. Fill that with actual keys
+3. Rename Frontend/.env.example to Frontend/.env
+4. Fill that with actual keys
+
+### 3) Frontend — install & run
+1. From the project root open a bash shell and change to `Frontend/`:
+
+```bash
+cd Frontend
+npm install
+# or: yarn install
+```
+
+2. Start the frontend dev server:
+
+```bash
+npm start
+# or: yarn start
+```
+
+The app will typically run at `http://localhost:3000`.
+
+### 4) Run the backend
+
+#### Setup Backend
+**Open each folder in backend and follow the instructions given to run backend as expected**
+
+```bash
+# if app.py has an app.run guard you can run:
+python app.py
+
+```
+
+API endpoints are available at `http://localhost:5000` by default.
+
+### 5) All dependencies (summary)
+This project uses a number of Python and system dependencies. Key packages:
+
+- Flask, flask-cors, python-dotenv
+- pymongo
+- bcrypt
+- flask-jwt-extended
+- pandas, numpy
+- scikit-learn, xgboost, joblib
+- shap
+- zxcvbn-python
+- librosa, soundfile, pydub, ffmpeg (audio)
+- tensorflow and/or torch (models)
+- SpeechBrain (speaker verification)
+- jsPDF, recharts, axios, react, react-router (frontend packages in `package.json`)
+
+Install system packages as required (ffmpeg, sox) via your OS package manager. Example (WSL / Ubuntu):
+
+```bash
+sudo apt update && sudo apt install -y ffmpeg sox build-essential git
+```
 
 ---
+
+## License 
 
 This project is licensed under the [MIT License](https://github.com/ovuiproduction/Password-Strength-Analyzer-Using-GenAI/blob/main/LICENSE)
