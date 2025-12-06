@@ -337,11 +337,7 @@ This project uses a number of Python and system dependencies. Key packages:
 - SpeechBrain (speaker verification)
 - jsPDF, recharts, axios, react, react-router (frontend packages in `package.json`)
 
-Install system packages as required (ffmpeg, sox) via your OS package manager. Example (WSL / Ubuntu):
 
-```bash
-sudo apt update && sudo apt install -y ffmpeg sox build-essential git
-```
 
 ### 6) Installing John the Ripper (recommended for crack-time estimations)
 John the Ripper (JTR) provides more realistic crack time estimations. On Windows you have two recommended options:
